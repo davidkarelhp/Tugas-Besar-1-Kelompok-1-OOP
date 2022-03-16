@@ -7,8 +7,10 @@ using namespace std;
 
 class Inventory {
     private:
-        Item * buffer[9][3];
+        Item * buffer[3][9];
     public:
+        void showItem();
+        void giveItem();
         
 };
 

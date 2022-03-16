@@ -3,10 +3,13 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "Inventory/Inventory.hpp"
 
 using namespace std;
 
 int main() {
+  Inventory inventory;
+
   string configPath = "./config";
   string itemConfigPath = configPath + "/item.txt";
 
@@ -54,6 +57,9 @@ int main() {
       // need to handle multiple destinations
       cin >> slotSrc >> slotQty >> slotDest;
       cout << "TODO" << endl;
+    } else if (command == "SHOW") {
+      // Tambahin prosedur buat tunjukkin crafting table disini
+      inventory.showItem();
     } else {
       // todo
       cout << "Invalid command" << endl;

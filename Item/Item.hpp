@@ -12,6 +12,10 @@ class Item {
         int quantity;
 
     public:
+        int getId();
+        string getName();
+        int getQuantity();
+        void setQuantity(int);
         virtual int getType() = 0;
 };
 
