@@ -9,14 +9,30 @@ class Item {
     protected:
         int id;
         string name;
+        string type;
         int quantity;
 
     public:
-        int getId();
-        string getName();
-        int getQuantity();
+        Item();
+        Item(int id, string name, string type, int quantity);
+    
+        int getId() const;
+        string getName() const;
+        int getQuantity() const;
         void setQuantity(int);
-        virtual int getType() = 0;
+        virtual int getType() const;
+};
+
+class Tools : public Item {
+    private:
+        int durability;
+    public:
+        Tools();
+        Tools(int durability);
+        
+        int getDurability() const;
+        void setDurability(int);
+        int getType();
 };
 
 #endif
