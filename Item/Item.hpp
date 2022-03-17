@@ -15,24 +15,27 @@ class Item {
     public:
         Item();
         Item(int id, string name, string type, int quantity);
+        Item(const Item& item);
+        ~Item();
     
         int getId() const;
         string getName() const;
+        string getType() const;
         int getQuantity() const;
-        void setQuantity(int);
-        virtual int getType() const;
+
+        void setQuantity(int val);
+        //virtual int getType() const;
 };
 
 class Tools : public Item {
     private:
         int durability;
     public:
-        Tools();
-        Tools(int durability);
+        Tools(int id, string name, string type, int quantity);
         
         int getDurability() const;
-        void setDurability(int);
-        int getType();
+        void useTool();
+        //int getType();
 };
 
 #endif
