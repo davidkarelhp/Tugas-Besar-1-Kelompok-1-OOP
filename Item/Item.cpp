@@ -1,9 +1,13 @@
 #include "Item.hpp"
+#include <bits/stdc++.h>
 // #include "Tools.hpp"
 
 using namespace std;
 
+unordered_map<string, Triplet> Item::itemMap = unordered_map<string, Triplet>();
+
 Item::Item() {}
+
 Item::Item(int id, string name, string type, int quantity) {
     this->id = id;
     this->name = name;
@@ -29,7 +33,3 @@ int Item::getQuantity() const {
 void Item::setQuantity(int val) {
     this->quantity = val;
 }
-//virtual int getType() const;
-
-
-//int getType();

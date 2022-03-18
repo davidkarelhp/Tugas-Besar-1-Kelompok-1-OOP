@@ -14,9 +14,7 @@ class RecipeTrie {
         TrieNode * getLastNode(string*, int);
 
     public:
-        RecipeTrie() {
-            this->root = new TrieNode();
-        }
+        RecipeTrie();
 
         void buildRecipe(int, int, string*, string, int);
 

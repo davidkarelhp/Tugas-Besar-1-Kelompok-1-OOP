@@ -6,17 +6,17 @@ RecipeTrie::RecipeTrie() {
 }
 
 TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
-            TrieNode * currentNode;
+    TrieNode * currentNode;
 
-            currentNode = this->root;
-            for (int i = 0; i < n; i++) {
-                if (currentNode->get(recipeArr[i]) == nullptr) {
-                    return nullptr;
-                }
-                currentNode = currentNode->get(recipeArr[i]);
-            }
-            return currentNode;
+    currentNode = this->root;
+    for (int i = 0; i < n; i++) {
+        if (currentNode->get(recipeArr[i]) == nullptr) {
+            return nullptr;
         }
+        currentNode = currentNode->get(recipeArr[i]);
+    }
+    return currentNode;
+}
 
 void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result, int quantity) {
     TrieNode * currentNode;

@@ -6,11 +6,13 @@
 #include "Item/Item.hpp"
 #include "Item/Tools.hpp"
 #include "Inventory/Inventory.hpp"
+#include "Crafting/Crafting.hpp"
+#include "IO/inputItem/InputItem.hpp"
 
 using namespace std;
 
+
 int main() {
-  Inventory myInventory;
 
   string configPath = "./config";
   string itemConfigPath = configPath + "/item.txt";
@@ -20,6 +22,7 @@ int main() {
   for (string line; getline(itemConfigFile, line);) {
     cout << line << endl;
     // do something
+    InputItem::readLine(line);
   }
 
   // read recipes
@@ -61,8 +64,7 @@ int main() {
       cout << "TODO" << endl;
     } else if (command == "SHOW") {
       // Tambahin prosedur buat tunjukkin crafting table disini
-      // myInventory.showItem();
-      myInventory.giveItem();
+      Inventory::showItem();
     } else {
       // todo
       cout << "Invalid command" << endl;
