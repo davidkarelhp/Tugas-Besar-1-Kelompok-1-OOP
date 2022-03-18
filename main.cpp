@@ -3,12 +3,14 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-// #include "Inventory/Inventory.hpp"
+#include "Item/Item.hpp"
+#include "Item/Tools.hpp"
+#include "Inventory/Inventory.hpp"
 
 using namespace std;
 
 int main() {
-  // Inventory inventory;
+  Inventory myInventory;
 
   string configPath = "./config";
   string itemConfigPath = configPath + "/item.txt";
@@ -59,7 +61,8 @@ int main() {
       cout << "TODO" << endl;
     } else if (command == "SHOW") {
       // Tambahin prosedur buat tunjukkin crafting table disini
-      // inventory.showItem();
+      // myInventory.showItem();
+      myInventory.giveItem();
     } else {
       // todo
       cout << "Invalid command" << endl;

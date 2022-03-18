@@ -7,7 +7,11 @@ class Tools : public Item {
     private:
         int durability;
     public:
-        int getType();
+        Tools(int id, string name, string type, int quantity);
+        
+        int getDurability() const;
+        void useTool();
+        //int getType();
 };
 
 #endif

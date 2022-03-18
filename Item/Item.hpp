@@ -27,15 +27,15 @@ class Item {
         //virtual int getType() const;
 };
 
-class Tools : public Item {
-    private:
-        int durability;
-    public:
-        Tools(int id, string name, string type, int quantity);
+// class Tools : public Item {
+//     private:
+//         int durability;
+//     public:
+//         Tools(int id, string name, string type, int quantity);
         
-        int getDurability() const;
-        void useTool();
-        //int getType();
-};
+//         int getDurability() const;
+//         void useTool();
+//         //int getType();
+// };
 
 #endif
