@@ -8,6 +8,7 @@ class Crafting {
     public:
         static RecipeTrie trie;
         static Item * craftingTable[3][3];
+        static void showCraftingTable();
 
 };
 

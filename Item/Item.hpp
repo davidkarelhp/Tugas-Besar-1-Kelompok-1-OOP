@@ -9,11 +9,13 @@ using namespace std;
 
 class Item {
     protected:
+        static unordered_map<string, Triplet> itemMap;
+
+        // Atribut objek/instans
         int id;
         string name;
         string type;
         int quantity;
-        static unordered_map<string, Triplet> itemMap;
 
     public:
         Item();
@@ -25,15 +27,18 @@ class Item {
         string getName() const;
         string getType() const;
         int getQuantity() const;
+
+        void setQuantity(int val);
+
         static void setMap(string key, Triplet value) {
             Item::itemMap[key] = value;
         }
         static Triplet getMap(string key) {
             return Item::itemMap[key];
         }
+        static Item * createItem(string name, int quantity);
 
-        void setQuantity(int val);
-        // virtual int getType() const;
+        virtual bool isTool() =  0;
 };
 
 #endif
