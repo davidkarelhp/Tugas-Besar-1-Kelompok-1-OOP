@@ -31,6 +31,7 @@ int main() {
 
   // sample interaction
   string command;
+  cout << "Masukkan command: ";
   while (cin >> command) {
     if (command == "EXPORT") {
       string outputPath;
@@ -69,6 +70,7 @@ int main() {
       // todo
       cout << "Invalid command" << endl;
     }
+    cout << "Masukkan command: ";
   }
   return 0;
 }
