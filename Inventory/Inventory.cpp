@@ -1,4 +1,5 @@
 #include "Inventory.hpp"
+#include "../Item/Tool.hpp"
 #include "../Exception/NotIntegerException.hpp"
 
 Item * Inventory::buffer[3][9] = {};
@@ -163,5 +164,31 @@ void Inventory::moveInventory() {
         }
     } else {
 
+    }
+}
+
+void Inventory::useInventory() {
+    string inventorySlotId;
+    cin >> inventorySlotId;
+
+    int slotId = stoi(inventorySlotId.substr(1));
+
+    int row = slotId / 3, col = slotId % 3;
+
+    if (Inventory::buffer[row][col] == nullptr) {
+        cout << "\nTidak ada item pada inventori I"<< slotId <<".\n\n";
+    } else {
+        if (Inventory::buffer[row][col]->isTool()) {
+            ((Tool*)Inventory::buffer[row][col])->useTool();
+            cout << "\nTool pada inventori I" << slotId << " digunakan.\n";
+            if (((Tool*)Inventory::buffer[row][col])->getDurability() <= 0) {
+                cout << "Durability habis, Tool hancur.\n";
+                delete Inventory::buffer[row][col];
+                Inventory::buffer[row][col] = nullptr;
+            }
+            cout << '\n';
+        } else {
+            cout << "\nItem pada inventori I"<< slotId <<" tidak bertipe Tool sehingga tidak dapat digunakan.\n\n";
+        }
     }
 }

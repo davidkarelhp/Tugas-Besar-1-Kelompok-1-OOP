@@ -56,13 +56,10 @@ int main() {
       Inventory::discardItem();
 
     } else if (command == "MOVE") {
-      // string slotSrc;
-      // int slotQty;
-      // string slotDest;
-      // // need to handle multiple destinations
-      // cin >> slotSrc >> slotQty >> slotDest;
-      // cout << "TODO" << endl;
       Inventory::moveInventory();
+
+    } else if (command == "USE") {
+      Inventory::useInventory();
 
     } else if (command == "SHOW") {
       Crafting::showCraftingTable();
