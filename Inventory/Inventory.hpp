@@ -11,18 +11,23 @@ class Inventory {
         static Item * buffer[3][9];
     public:
         static void showItem() {
-
+            cout << "INVENTORY\n";
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 9; j++) {
-                    // int x = buffer[i][j]->getId();
-                    // cout << "[" << (Inventory::buffer[i][j]->getId() < 10 ? (0 << Inventory::buffer[i][j]->getId()) : Inventory::buffer[i][j]->getId())
-                    // << " " << (Inventory::buffer[i][j]->getQuantity() < 10 ? 0 << Inventory::buffer[i][j]->getQuantity() : Inventory::buffer[i][j]->getQuantity()) << "]";
+                    if (buffer[i][j] == nullptr) {
+                        cout << "[-1 00]";
+                    } else {
+                        cout << "[" << (Inventory::buffer[i][j]->getId() < 10 ? (0 << Inventory::buffer[i][j]->getId()) : Inventory::buffer[i][j]->getId())
+                        << " " << (Inventory::buffer[i][j]->getQuantity() < 10 ? 0 << Inventory::buffer[i][j]->getQuantity() : Inventory::buffer[i][j]->getQuantity()) << "]";
+                    }
+                    
                     if (j != 8) {
                         cout <<" ";
                     }
                 }
                 cout << '\n';
             }
+            cout << '\n';
         }
 
         static void giveItem() {

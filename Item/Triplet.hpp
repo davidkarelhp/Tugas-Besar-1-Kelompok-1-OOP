@@ -11,6 +11,10 @@ class Triplet {
     public:
         Triplet();
         Triplet(int id, std::string typeItem, bool tool);
+        int getId();
+        std::string getTypeItem();
+        bool isTool();
+
 };
 
 #endif

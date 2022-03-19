@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 #include "Item/Item.hpp"
-#include "Item/Tools.hpp"
+#include "Item/Tool.hpp"
+#include "Item/NonTool.hpp"
 #include "Inventory/Inventory.hpp"
 #include "Crafting/Crafting.hpp"
 #include "IO/inputItem/InputItem.hpp"
@@ -50,13 +51,16 @@ int main() {
       }
 
       cout << "Exported" << endl;
+      
     } else if (command == "CRAFT") {
       cout << "TODO" << endl;
+
     } else if (command == "GIVE") {
       string itemName;
       int itemQty;
       cin >> itemName >> itemQty;
       cout << "TODO" << endl;
+
     } else if (command == "MOVE") {
       string slotSrc;
       int slotQty;
@@ -64,9 +68,12 @@ int main() {
       // need to handle multiple destinations
       cin >> slotSrc >> slotQty >> slotDest;
       cout << "TODO" << endl;
+
     } else if (command == "SHOW") {
       // Tambahin prosedur buat tunjukkin crafting table disini
+      Crafting::showCraftingTable();
       Inventory::showItem();
+
     } else {
       // todo
       cout << "Invalid command" << endl;

@@ -9,11 +9,13 @@ using namespace std;
 
 class Item {
     protected:
+        static unordered_map<string, Triplet> itemMap;
+
+        // Atribut objek/instans
         int id;
         string name;
         string type;
         int quantity;
-        static unordered_map<string, Triplet> itemMap;
 
     public:
         Item();
@@ -33,7 +35,10 @@ class Item {
         }
 
         void setQuantity(int val);
-        // virtual int getType() const;
+
+        Item * createItem(string name, int quantity);
+
+        virtual bool isTool() =  0;
 };
 
 #endif

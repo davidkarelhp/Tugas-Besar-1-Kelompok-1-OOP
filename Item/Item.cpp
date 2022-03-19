@@ -1,6 +1,7 @@
 #include "Item.hpp"
 #include <bits/stdc++.h>
-// #include "Tools.hpp"
+#include "Tool.hpp"
+#include "NonTool.hpp"
 
 using namespace std;
 
@@ -32,4 +33,13 @@ int Item::getQuantity() const {
         
 void Item::setQuantity(int val) {
     this->quantity = val;
+}
+
+Item * Item::createItem(string name, int quantity) {
+    Triplet triplet = Item::itemMap[name];
+    if (triplet.isTool()) {
+        return new Tool(triplet.getId(), name, triplet.getTypeItem(), quantity);
+    } else {
+        return new NonTool(triplet.getId(), name, triplet.getTypeItem(), quantity);
+    }
 }
