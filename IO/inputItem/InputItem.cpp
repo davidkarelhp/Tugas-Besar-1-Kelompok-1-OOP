@@ -23,5 +23,6 @@ void InputItem::readLine(string line) {
         i++;
     }
     Triplet triplet(id, typeItem, tool);
+    // cout << triplet.getId() << '\n';
     Item::setMap(name, triplet);
 }

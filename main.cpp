@@ -51,15 +51,17 @@ int main() {
       }
 
       cout << "Exported" << endl;
-      
+
     } else if (command == "CRAFT") {
       cout << "TODO" << endl;
 
     } else if (command == "GIVE") {
       string itemName;
       int itemQty;
-      cin >> itemName >> itemQty;
-      cout << "TODO" << endl;
+      // cin >> itemName >> itemQty;
+      // cout << "TODO" << endl;
+
+      Inventory::giveItem();
 
     } else if (command == "MOVE") {
       string slotSrc;
