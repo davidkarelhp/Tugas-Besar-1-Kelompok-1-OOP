@@ -13,6 +13,7 @@ class Inventory {
         static void showItem();
         static void giveItem();
         static void discardItem();
+        static void moveInventory();
 
 
         

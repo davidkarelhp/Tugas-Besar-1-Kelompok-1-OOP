@@ -120,3 +120,48 @@ void Inventory::discardItem() {
         }
     }
 }
+
+void Inventory::moveInventory() {
+    string inventorySlotIdSrc, inventorySlotIdTarget;
+    int slotQuantity;
+
+    cin >> inventorySlotIdSrc >> slotQuantity >> inventorySlotIdTarget;
+    int slotIdSrc = stoi(inventorySlotIdSrc.substr(1, 1));
+    int slotIdTarget = stoi(inventorySlotIdTarget.substr(1, 1));
+
+    if (slotQuantity == 1) {
+        int rowTarget = (slotIdTarget / 9), colTarget = (slotIdTarget % 9);
+        if (inventorySlotIdSrc.substr(0, 1) == "I") {
+            int rowSrc = (slotIdSrc / 9), colSrc = (slotIdSrc % 9);
+            if (Inventory::buffer[rowSrc][colSrc] == nullptr) {
+                cout << "\nTidak ada item yang dapat dipindahkan.\n\n";
+            } else {
+                if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
+                    Inventory::buffer[rowTarget][colTarget] = Inventory::buffer[rowSrc][colSrc];
+                    Inventory::buffer[rowSrc][colSrc] = nullptr;
+                    cout << "Item berhasil dipindahkan dari inventori I" << slotIdSrc << " ke inventori I" << slotIdTarget << ".\n\n";
+                } else {
+                    if (Inventory::buffer[rowTarget][colTarget]->getId() != Inventory::buffer[rowSrc][colSrc]->getId()) {
+                        cout << "Item pada inventori I" << slotIdSrc << " dan I" << slotIdTarget << " tidak sama.\n\n";
+                    } else {
+                        if (Inventory::buffer[rowTarget][colTarget]->isTool()) {
+                            cout << "\nItem bertipe Tool tidak dapat ditumpuk\n\n";
+                        } else {
+                            int targetQuantity = min(64, Inventory::buffer[rowTarget][colTarget]->getQuantity() + Inventory::buffer[rowSrc][colSrc]->getQuantity());
+                            Inventory::buffer[rowTarget][colTarget] = Inventory::buffer[rowSrc][colSrc];
+                            Inventory::buffer[rowTarget][colTarget]->setQuantity(targetQuantity);
+                            Inventory::buffer[rowSrc][colSrc] = nullptr;
+                            cout << "Item berhasil dipindahkan dari inventori I" << slotIdSrc << " ke inventori I" << slotIdTarget << ".\n\n";
+                        }
+                    }
+                }
+            }
+
+        } else //inventorySlotIdSrc.substr(0, 1) == "C"
+        {
+
+        }
+    } else {
+
+    }
+}
