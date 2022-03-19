@@ -20,13 +20,7 @@ int main() {
   string itemConfigPath = configPath + "/item.txt";
 
   // read item from config file
-  ifstream itemConfigFile(itemConfigPath);
-  for (string line; getline(itemConfigFile, line);) {
-    // cout << line << endl;
-    // do something
-    InputItem::readLine(line);
-  }
-
+  InputItem::readFile(itemConfigPath);
   // read recipes
   for (const auto &entry :
        filesystem::directory_iterator(configPath + "/recipe")) {

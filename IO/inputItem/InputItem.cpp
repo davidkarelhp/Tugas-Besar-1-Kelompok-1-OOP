@@ -50,6 +50,8 @@ void InputItem::readFile(string path)
     }
     catch (const ifstream::failure &e)
     {
+        dataStream.close();
         cout << "Gagal membuka file konfigurasi item" << endl;
     }
+    dataStream.close();
 }
