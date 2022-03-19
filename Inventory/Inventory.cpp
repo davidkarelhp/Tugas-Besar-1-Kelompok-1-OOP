@@ -95,7 +95,7 @@ void Inventory::discardItem() {
 
     cin >> inventorySlotId >> quantity;
 
-    int slotId = stoi(inventorySlotId.substr(1, 1));
+    int slotId = stoi(inventorySlotId.substr(1));
 
     int row = (slotId / 9), col = (slotId % 9);
 
@@ -126,8 +126,8 @@ void Inventory::moveInventory() {
     int slotQuantity;
 
     cin >> inventorySlotIdSrc >> slotQuantity >> inventorySlotIdTarget;
-    int slotIdSrc = stoi(inventorySlotIdSrc.substr(1, 1));
-    int slotIdTarget = stoi(inventorySlotIdTarget.substr(1, 1));
+    int slotIdSrc = stoi(inventorySlotIdSrc.substr(1));
+    int slotIdTarget = stoi(inventorySlotIdTarget.substr(1));
 
     if (slotQuantity == 1) {
         int rowTarget = (slotIdTarget / 9), colTarget = (slotIdTarget % 9);
