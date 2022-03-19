@@ -23,3 +23,18 @@ void Crafting::showCraftingTable() {
     }
     cout << '\n';
 }
+
+void Crafting::setCraftingSlot(int slotId, Item * item) {
+    int row = slotId / 3, col = slotId % 3;
+    if (Crafting::craftingTable[row][col] != nullptr) {
+        delete Crafting::craftingTable[row][col];
+    }
+
+    Crafting::craftingTable[row][col] = item;
+}
+
+Item * Crafting::getCraftingSlot(int slotId) {
+    int row = slotId / 3, col = slotId % 3;
+
+    return Crafting::craftingTable[row][col];
+}

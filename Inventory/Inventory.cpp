@@ -1,5 +1,6 @@
 #include "Inventory.hpp"
 #include "../Item/Tool.hpp"
+#include "../Crafting/Crafting.hpp"
 #include "../Exception/NotIntegerException.hpp"
 
 Item * Inventory::buffer[3][9] = {};
@@ -159,6 +160,20 @@ void Inventory::moveInventory() {
 
         } else //inventorySlotIdSrc.substr(0, 1) == "C"
         {
+            int rowSrc = (slotIdSrc / 3), colSrc = (slotIdSrc % 3);
+            Item * temp = Crafting::getCraftingSlot(slotIdSrc);
+            if (temp == nullptr) {
+                cout << "\nTidak ada item yang dapat dipindahkan.\n\n";
+            } else {
+                if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
+                    Inventory::buffer[rowTarget][colTarget] = temp;
+                } else { // Asumsi item sudah bertipe sama
+                    Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
+                    delete temp;
+                }
+                Crafting::setCraftingSlot(slotIdSrc, nullptr);
+                cout << "\nItem berhasil dipindahkan dari C" << slotIdSrc << "ke I" << slotIdTarget << ".\n\n";
+            }
 
         }
     } else {

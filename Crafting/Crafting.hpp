@@ -9,6 +9,8 @@ class Crafting {
         static RecipeTrie trie;
         static Item * craftingTable[3][3];
         static void showCraftingTable();
+        static void setCraftingSlot(int, Item *);
+        static Item * getCraftingSlot(int);
 
 };
 
