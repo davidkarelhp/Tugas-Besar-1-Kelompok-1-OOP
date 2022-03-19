@@ -77,7 +77,6 @@ void Inventory::giveItem() {
             if (Inventory::buffer[i][j] == nullptr){
                 int itemReduced = min(64, itemQuantity);
                 itemQuantity -= itemReduced;
-                // Inventory::buffer[i][j]->setQuantity(Inventory::buffer[i][j]->getQuantity() + itemReduced);
                 Inventory::buffer[i][j] = Item::createItem(itemName, itemReduced);
             }
         }
@@ -173,7 +172,7 @@ void Inventory::useInventory() {
 
     int slotId = stoi(inventorySlotId.substr(1));
 
-    int row = slotId / 3, col = slotId % 3;
+    int row = slotId / 9, col = slotId % 9;
 
     if (Inventory::buffer[row][col] == nullptr) {
         cout << "\nTidak ada item pada inventori I"<< slotId <<".\n\n";
