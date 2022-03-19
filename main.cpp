@@ -8,6 +8,7 @@
 #include "Inventory/Inventory.hpp"
 #include "Crafting/Crafting.hpp"
 #include "IO/inputItem/InputItem.hpp"
+#include "IO/inputRecipe/InputRecipe.hpp"
 
 using namespace std;
 
@@ -20,7 +21,7 @@ int main() {
   // read item from config file
   ifstream itemConfigFile(itemConfigPath);
   for (string line; getline(itemConfigFile, line);) {
-    cout << line << endl;
+    // cout << line << endl;
     // do something
     InputItem::readLine(line);
   }
@@ -28,7 +29,8 @@ int main() {
   // read recipes
   for (const auto &entry :
        filesystem::directory_iterator(configPath + "/recipe")) {
-    cout << entry.path() << endl;
+    // cout << entry.path() << endl;
+    InputRecipe::readFile(entry.path().string());
     // read from file and do something
   }
 
