@@ -36,3 +36,87 @@ void Inventory::showItem() {
     }
     cout << '\n';
 }
+
+void Inventory::giveItem() {
+    string itemName, itemQuantityString;
+    int itemQuantity;
+    bool isNumber = true;
+    cin >> itemName >> itemQuantityString;
+    for (char const &c: itemQuantityString) {
+        if (!isdigit(c)) {
+            isNumber = false;
+            break;
+        }
+    }
+
+    // Cek Item name valid atau tidak di sini
+
+    // Cek Item adalah non tool di sini
+
+    if (!isNumber) {
+        throw new NotIntegerException;
+    }
+
+    itemQuantity = stoi(itemQuantityString);
+
+    for (int i = 0; i < 3 && itemQuantity > 0; i++) {
+        for (int j = 0; j < 9 && itemQuantity > 0; j++) {
+            if (Inventory::buffer[i][j] != nullptr) {
+                if (Inventory::buffer[i][j]->getName() == itemName && Inventory::buffer[i][j]->getQuantity() < 64) {
+                    int itemReduced = min(64 - Inventory::buffer[i][j]->getQuantity(), itemQuantity);
+                    itemQuantity -= itemReduced;
+                    Inventory::buffer[i][j]->setQuantity(Inventory::buffer[i][j]->getQuantity() + itemReduced);
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < 3 && itemQuantity > 0; i++) {
+        for (int j = 0; j < 9 && itemQuantity > 0; j++) {
+            if (Inventory::buffer[i][j] == nullptr){
+                int itemReduced = min(64, itemQuantity);
+                itemQuantity -= itemReduced;
+                // Inventory::buffer[i][j]->setQuantity(Inventory::buffer[i][j]->getQuantity() + itemReduced);
+                Inventory::buffer[i][j] = Item::createItem(itemName, itemReduced);
+            }
+        }
+    }
+
+    if (itemQuantity > 0) {
+        cout << "\nItem tidak dimasukkan semua, hanya dimasukkan sebisanya saja.\n\n";
+    } else {
+        cout << "\nItem berhasil dimasukkan ke inventory.\n\n";
+    }
+}
+
+void Inventory::discardItem() {
+    string inventorySlotId;
+    int quantity;
+
+    cin >> inventorySlotId >> quantity;
+
+    int slotId = stoi(inventorySlotId.substr(1, 1));
+
+    int row = (slotId / 9), col = (slotId % 9);
+
+    if (slotId < 0 || slotId > 26) {
+        cout << "\nSlot Id tidak valid.\n\n";
+    } else {
+        if (Inventory::buffer[row][col] == nullptr) {
+            cout << "\nItem pada inventori I" << slotId << " kosong.\n\n";
+        } else {
+            if (Inventory::buffer[row][col]->getQuantity() < quantity) {
+                cout << "\nJumlah item yang dimasukkan melebihi jumlah item pada inventori I" << slotId << ".\n\n";
+            } else {
+                Inventory::buffer[row][col]->setQuantity(Inventory::buffer[row][col]->getQuantity() - quantity);
+
+                if (Inventory::buffer[row][col]->getQuantity() == 0) {
+                    delete Inventory::buffer[row][col];
+                    Inventory::buffer[row][col] = nullptr;
+                }
+
+                cout << "\nItem pada inventori I" << slotId << " berhasil di-discard.\n\n";
+            }
+        }
+    }
+}

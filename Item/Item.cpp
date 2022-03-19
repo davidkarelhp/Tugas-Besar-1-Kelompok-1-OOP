@@ -38,7 +38,7 @@ void Item::setQuantity(int val) {
 Item * Item::createItem(string name, int quantity) {
     Triplet triplet;
     triplet = Item::getMap(name);
-    // cout << triplet.getId();
+    
     if (triplet.isTool()) {
         return new Tool(triplet.getId(), name, triplet.getTypeItem(), quantity);
     } else {

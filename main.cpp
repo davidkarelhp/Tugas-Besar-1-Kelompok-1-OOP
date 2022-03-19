@@ -56,12 +56,10 @@ int main() {
       cout << "TODO" << endl;
 
     } else if (command == "GIVE") {
-      string itemName;
-      int itemQty;
-      // cin >> itemName >> itemQty;
-      // cout << "TODO" << endl;
-
       Inventory::giveItem();
+
+    } else if (command == "DISCARD") {
+      Inventory::discardItem();
 
     } else if (command == "MOVE") {
       string slotSrc;
@@ -72,7 +70,6 @@ int main() {
       cout << "TODO" << endl;
 
     } else if (command == "SHOW") {
-      // Tambahin prosedur buat tunjukkin crafting table disini
       Crafting::showCraftingTable();
       Inventory::showItem();
 
