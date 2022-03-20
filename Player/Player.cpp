@@ -72,7 +72,8 @@ void Player::play()
         }
         else if (command == "CRAFT")
         {
-            cout << "TODO" << endl;
+            // cout << "TODO" << endl;
+            Crafting::craft();
         }
         else if (command == "GIVE")
         {

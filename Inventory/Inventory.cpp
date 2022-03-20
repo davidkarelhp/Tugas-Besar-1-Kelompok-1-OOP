@@ -66,6 +66,10 @@ void Inventory::giveItem() {
 
     itemQuantity = stoi(itemQuantityString);
 
+    Inventory::giveAlgorithm(itemName, itemQuantity);
+}
+
+void Inventory::giveAlgorithm(string itemName, int itemQuantity) {
     for (int i = 0; i < 3 && itemQuantity > 0; i++) {
         for (int j = 0; j < 9 && itemQuantity > 0; j++) {
             if (Inventory::buffer[i][j] != nullptr) {
@@ -157,7 +161,7 @@ void Inventory::moveInventory() {
                             Inventory::buffer[rowTarget][colTarget] = Inventory::buffer[rowSrc][colSrc];
                             Inventory::buffer[rowTarget][colTarget]->setQuantity(targetQuantity);
                             Inventory::buffer[rowSrc][colSrc] = nullptr;
-                            cout << "Item berhasil dipindahkan dari inventori I" << slotIdSrc << " ke inventori C" << slotIdTarget << ".\n\n";
+                            cout << "Item berhasil dipindahkan dari inventori I" << slotIdSrc << " ke inventori I" << slotIdTarget << ".\n\n";
                         }
                     }
                 }
@@ -167,29 +171,31 @@ void Inventory::moveInventory() {
         {
             // int rowSrc = (slotIdSrc / 3), colSrc = (slotIdSrc % 3);
             Item * temp = Crafting::getCraftingSlot(slotIdSrc);
-            cout << temp->getName() << " " << temp->getId() << '\n';
+            // cout << temp->getName() << " " << temp->getId() << '\n';
+            
             if (temp == nullptr) {
                 cout << "\nTidak ada item yang dapat dipindahkan.\n\n";
             } else {
                 if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
-                    Inventory::buffer[rowTarget][colTarget] = temp;
+                    Inventory::buffer[rowTarget][colTarget] = Item::createItem(temp->getName(), 1);
                 } else { // Asumsi item sudah bertipe sama
                     Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
                     // delete temp;
                 }
-                Crafting::setCraftingSlot(slotIdSrc, nullptr, false);
+                // Crafting::setCraftingSlot(slotIdSrc, nullptr, false);
+                Crafting::deleteCraftingSlot(slotIdSrc);
                 cout << "\nItem berhasil dipindahkan dari C" << slotIdSrc << " ke I" << slotIdTarget << ".\n\n";
             }
 
         }
     } else {
-        string tempArr[slotQuantity] = {};
+        string * tempArr= new string[slotQuantity];
         tempArr[0] = inventorySlotIdTarget;
 
         for (int i = 1; i < slotQuantity; i++) {
             cin >> tempArr[i];
         }
-
+        int slotIdTarget;
         int rowSrc = (slotIdSrc / 9), colSrc = (slotIdSrc % 9);
         if (Inventory::buffer[rowSrc][colSrc] == nullptr) {
             cout << "\nTidak ada item pada inventori I" << slotIdSrc << ".\n\n";
@@ -200,18 +206,25 @@ void Inventory::moveInventory() {
 
 
                 for (int i = 0; i < slotQuantity; i++) {
-                    int slotIdTarget = stoi(tempArr[i].substr(1));
-                    Crafting::setCraftingSlot(slotIdTarget, Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1), true);
+                    slotIdTarget = stoi(tempArr[i].substr(1));
+                    if (Crafting::getCraftingSlot(slotIdTarget) == nullptr) {
+                        Crafting::setCraftingSlot(slotIdTarget, Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1), false);
+                    } else {
+                        Crafting::setCraftingSlot(slotIdTarget, Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1), true);
+                    }
                 }
+
+                Inventory::buffer[rowSrc][colSrc]->setQuantity(Inventory::buffer[rowSrc][colSrc]->getQuantity() - slotQuantity);
                 if (Inventory::buffer[rowSrc][colSrc]->getQuantity() <= 0) {
                     delete Inventory::buffer[rowSrc][colSrc];
                     Inventory::buffer[rowSrc][colSrc] = nullptr;
                 }
-                Inventory::buffer[rowSrc][colSrc]->setQuantity(Inventory::buffer[rowSrc][colSrc]->getQuantity() - slotQuantity);
 
                 cout << "\nItem berhasil dipindahkan.\n\n";
             }
         }
+
+        delete[] tempArr;
     }
 }
 
