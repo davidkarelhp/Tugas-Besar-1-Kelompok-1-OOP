@@ -10,6 +10,7 @@ class Crafting {
         static int endLeftIdx[2];
         static int startRightIdx[2];
         static int endRightIdx[2];
+        static void clear();
     public:
         static RecipeTrie trie;
         static Item * craftingTable[3][3];
