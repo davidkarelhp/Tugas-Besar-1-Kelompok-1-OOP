@@ -66,15 +66,21 @@ void Inventory::giveItem() {
 
     itemQuantity = stoi(itemQuantityString);
 
-    Inventory::giveAlgorithm(itemName, itemQuantity);
+    Inventory::giveAlgorithm(itemName, itemQuantity, 0);
 }
 
-void Inventory::giveAlgorithm(string itemName, int itemQuantity) {
+void Inventory::giveAlgorithm(string itemName, int itemQuantity, int durability) {
+    Triplet triplet;
+    int itemReduced;
+    triplet = Item::getMap(itemName);
+
     for (int i = 0; i < 3 && itemQuantity > 0; i++) {
         for (int j = 0; j < 9 && itemQuantity > 0; j++) {
             if (Inventory::buffer[i][j] != nullptr) {
                 if (Inventory::buffer[i][j]->getName() == itemName && Inventory::buffer[i][j]->getQuantity() < 64) {
-                    int itemReduced = min(64 - Inventory::buffer[i][j]->getQuantity(), itemQuantity);
+                    if (!triplet.isTool()) {
+                        itemReduced = min(64 - Inventory::buffer[i][j]->getQuantity(), itemQuantity);
+                    }
                     itemQuantity -= itemReduced;
                     Inventory::buffer[i][j]->setQuantity(Inventory::buffer[i][j]->getQuantity() + itemReduced);
                 }
@@ -85,9 +91,16 @@ void Inventory::giveAlgorithm(string itemName, int itemQuantity) {
     for (int i = 0; i < 3 && itemQuantity > 0; i++) {
         for (int j = 0; j < 9 && itemQuantity > 0; j++) {
             if (Inventory::buffer[i][j] == nullptr){
-                int itemReduced = min(64, itemQuantity);
+                if (!triplet.isTool()) {
+                    itemReduced = min(64, itemQuantity);
+                } else {
+                    itemReduced = 1;
+                }
                 itemQuantity -= itemReduced;
                 Inventory::buffer[i][j] = Item::createItem(itemName, itemReduced);
+                if (durability != 0) {
+                    ((Tool *)Inventory::buffer[i][j])->setDurability(durability);
+                }
             }
         }
     }
@@ -178,6 +191,9 @@ void Inventory::moveInventory() {
             } else {
                 if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
                     Inventory::buffer[rowTarget][colTarget] = Item::createItem(temp->getName(), 1);
+                    if (temp->isTool()) {
+                        ((Tool *)Inventory::buffer[rowTarget][colTarget])->setDurability(((Tool *)temp)->getDurability());
+                    }
                 } else { // Asumsi item sudah bertipe sama
                     Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
                     // delete temp;
@@ -204,15 +220,22 @@ void Inventory::moveInventory() {
                 cout << "\nItem pada inventori I" << slotIdSrc << " tidak mencukupi.\n\n";
             } else {
 
-
+                Item * temp;
                 for (int i = 0; i < slotQuantity; i++) {
                     slotIdTarget = stoi(tempArr[i].substr(1));
+                    temp = Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1);
+                    if (temp->isTool()) {
+                        ((Tool *)temp)->setDurability(((Tool *)Inventory::buffer[rowSrc][colSrc])->getDurability());
+                        cout << "dur: " << ((Tool *)temp)->getDurability() << '\n';
+                    }
+
                     if (Crafting::getCraftingSlot(slotIdTarget) == nullptr) {
-                        Crafting::setCraftingSlot(slotIdTarget, Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1), false);
+                        Crafting::setCraftingSlot(slotIdTarget, temp, false);
                     } else {
-                        Crafting::setCraftingSlot(slotIdTarget, Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1), true);
+                        Crafting::setCraftingSlot(slotIdTarget, temp, true);
                     }
                 }
+                // delete temp;
 
                 Inventory::buffer[rowSrc][colSrc]->setQuantity(Inventory::buffer[rowSrc][colSrc]->getQuantity() - slotQuantity);
                 if (Inventory::buffer[rowSrc][colSrc]->getQuantity() <= 0) {

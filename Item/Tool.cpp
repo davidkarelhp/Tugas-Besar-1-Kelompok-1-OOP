@@ -8,6 +8,10 @@ int Tool::getDurability() const {
     return this->durability;
 }
 
+void Tool::setDurability(int durability) {
+    this->durability = durability;
+}
+
 void Tool::useTool() {
     this->durability -= 1;
     // kalau 0 toolnya dihapus

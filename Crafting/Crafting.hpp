@@ -10,6 +10,8 @@ class Crafting {
         static int endLeftIdx[2];
         static int startRightIdx[2];
         static int endRightIdx[2];
+        static int filledSlot;
+        static int toolsQuantity;
         static void clear();
     public:
         static RecipeTrie trie;

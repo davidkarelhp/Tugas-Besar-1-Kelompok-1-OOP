@@ -10,6 +10,7 @@ class Tool : public Item {
         Tool(int id, string name, string type, int quantity);
         
         int getDurability() const;
+        void setDurability(int);
         void useTool();
         bool isTool();
 };

@@ -9,19 +9,19 @@ RecipeTrie::RecipeTrie() {
 
 TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
     TrieNode * currentNode;
-    // Triplet triplet;
     string temp;
 
     currentNode = this->root;
-    // cout << "n: " << n << '\n';
     for (int i = 0; i < n; i++) {
-        // cout << recipeArr[i] << '\n';
         if (currentNode->get(recipeArr[i]) == nullptr) {
             temp = Item::getMap(recipeArr[i]).getTypeItem();
-            if (temp != "-" && currentNode->get(temp) == nullptr)
-            {
+            // cout << "type : " << temp << '\n';
+            if (temp == "-") {
                 return nullptr;
             } else {
+                if (currentNode->get(temp) == nullptr) {
+                    return nullptr;
+                }
                 currentNode = currentNode->get(temp);
             }
         } else {
@@ -29,6 +29,7 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
         }
     }
 
+    // return nullptr;
     return currentNode;
 }
 
