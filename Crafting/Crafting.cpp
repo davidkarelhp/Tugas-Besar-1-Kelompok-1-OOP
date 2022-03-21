@@ -299,7 +299,7 @@ void Crafting::craft() {
     }
 
     if (!found) {
-        cout << "\nNo recipe.\n\n";
+        cout << "\nTidak ada resep yang cocok dengan konfigurasi item pada crafting table.\n\n";
     } else {
         cout << "\nItem yang di-craft adalah " << temp->first << " dengan jumlah " << temp->second << ".\n";
         Inventory::giveAlgorithm(temp->first, temp->second);

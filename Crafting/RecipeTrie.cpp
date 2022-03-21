@@ -1,4 +1,6 @@
 #include "RecipeTrie.hpp"
+#include "../Item/Item.hpp"
+#include "../Item/Triplet.hpp"
 
 
 RecipeTrie::RecipeTrie() {
@@ -7,14 +9,24 @@ RecipeTrie::RecipeTrie() {
 
 TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
     TrieNode * currentNode;
+    // Triplet triplet;
+    string temp;
+
     currentNode = this->root;
     // cout << "n: " << n << '\n';
     for (int i = 0; i < n; i++) {
-        cout << recipeArr[i] << '\n';
+        // cout << recipeArr[i] << '\n';
         if (currentNode->get(recipeArr[i]) == nullptr) {
-            return nullptr;
+            temp = Item::getMap(recipeArr[i]).getTypeItem();
+            if (temp != "-" && currentNode->get(temp) == nullptr)
+            {
+                return nullptr;
+            } else {
+                currentNode = currentNode->get(temp);
+            }
+        } else {
+            currentNode = currentNode->get(recipeArr[i]);
         }
-        currentNode = currentNode->get(recipeArr[i]);
     }
 
     return currentNode;
