@@ -48,6 +48,8 @@ void Crafting::showCraftingTable() {
 
 void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
     int row = slotId / 3, col = slotId % 3;
+    // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
+    // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
 
     if (item != nullptr) {
         if (startLeftIdx[0] == -1) {
@@ -97,7 +99,7 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
         bool found;
 
         found = false;
-        if (row = startLeftIdx[0] && col == startLeftIdx[1]) {
+        if (row == startLeftIdx[0] && col == startLeftIdx[1]) {
             for (int i = slotId + 1; i < 9 && !found; i++) {
                 if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
                     found = true;
@@ -115,7 +117,7 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
         }
 
 
-        if (row = endLeftIdx[0] && col == endLeftIdx[1]) {
+        if (row == endLeftIdx[0] && col == endLeftIdx[1]) {
             for (int i = slotId - 1; i >= 9 && !found; i++) {
                 if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
                     found = true;
@@ -134,7 +136,7 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
         }
 
 
-    if (row = startRightIdx[0] && col == startRightIdx[1]) {
+    if (row == startRightIdx[0] && col == startRightIdx[1]) {
         int i_loop, j_loop;
         if (row % 3 == 2) {
             i_loop = row - 1;
@@ -162,7 +164,7 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
         }
     }
 
-    if (row = endRightIdx[0] && col == endRightIdx[1]) {
+    if (row == endRightIdx[0] && col == endRightIdx[1]) {
         int i_loop, j_loop;
         if (row % 3 == 2) {
             i_loop = row - 1;
@@ -221,6 +223,8 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
     }
     
     Crafting::craftingTable[row][col] = item;
+    // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
+    // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
     // cout << "finish set\n";
 }
 
@@ -351,20 +355,125 @@ void Crafting::craft() {
             }
         }
     }
+    // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
+    // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
 }
 
 void Crafting::deleteCraftingSlot(int slotId) {
-    int row = slotId / 3, col = slotId % 3;
+    // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
+    // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
+    int row = slotId / 3, col = slotId % 3, i;
+    // cout << "row: " << row << ", col: " << col << '\n';
 
     if (Crafting::craftingTable[row][col] != nullptr) {
         if (Crafting::craftingTable[row][col]->isTool()) {
             Crafting::toolsQuantity -= max (0, Crafting::toolsQuantity - 1);
         }
         Crafting::filledSlot -= max (0, Crafting::filledSlot - 1);
+
+        bool found;
+
+        found = false;
+        if (row == startLeftIdx[0] && col == startLeftIdx[1]) {
+            // cout << "here\n";
+            for (i = slotId + 1; i < 9 && !found; i++) {
+                if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
+                    found = true;
+                }
+            }
+
+            if (found) {
+                startLeftIdx[0] = (i - 1) / 3;
+                startLeftIdx[1] = (i - 1) % 3;
+                found = false;
+            } else {
+                startLeftIdx[0] = -1;
+                startLeftIdx[1] = -1;
+            }
+        }
+
+
+        if (row == endLeftIdx[0] && col == endLeftIdx[1]) {
+            for (i = slotId - 1; i >= 9 && !found; i++) {
+                if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
+                    found = true;
+                }
+            }
+            if (found) {
+                endLeftIdx[0] = (i - 1) / 3;
+                endLeftIdx[1] = (i - 1) % 3;
+                found = false;
+
+            } else {
+                endLeftIdx[0] = -1;
+                endLeftIdx[1] = -1;
+
+            }
+        }
+
+
+        if (row == startRightIdx[0] && col == startRightIdx[1]) {
+            int i_loop, j_loop;
+            if (row % 3 == 2) {
+                i_loop = row - 1;
+                i_loop = 0;
+            } else {
+                i_loop = row;
+                j_loop = col + 1;
+            }
+
+            for (; i_loop < 3 && !found; i_loop++) {
+                for (; j_loop >= 0 && !found; j_loop--) {
+                    if (Crafting::craftingTable[i_loop][j_loop] != nullptr) {
+                        found = true;
+                    }
+                }
+            }
+
+            if (found) {
+                endRightIdx[0] = i_loop - 1;
+                endRightIdx[1] = j_loop + 1;
+                found = false;
+            } else {
+                endRightIdx[0] = -1;
+                endRightIdx[1] = -1;
+            }
+        }
+
+        if (row == endRightIdx[0] && col == endRightIdx[1]) {
+            int i_loop, j_loop;
+            if (row % 3 == 2) {
+                i_loop = row - 1;
+                j_loop = 0;
+            } else {
+                i_loop = row;
+                j_loop = col + 1;
+            }
+
+            for (; i_loop >= 0 && !found; i_loop--) {
+                for (; j_loop < 0 && !found; j_loop++) {
+                    if (Crafting::craftingTable[i_loop][j_loop] != nullptr) {
+                        found = true;
+                    }
+                }
+            }
+
+            if (found) {
+                startRightIdx[0] = i_loop + 1;
+                startRightIdx[1] = j_loop - 1;
+                found = false;
+            } else {
+                startRightIdx[0] = -1;
+                startRightIdx[1] = -1;
+            }
+        }
+
     }
 
     delete Crafting::craftingTable[row][col];
     Crafting::craftingTable[row][col] = nullptr;
+    // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
+    // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
 }
 
 void Crafting::clear() {
