@@ -9,6 +9,7 @@
 #include "../Exception/ItemNotExistException.hpp"
 #include "../Exception/NotEnoughItemException.hpp"
 #include "../Exception/NonToolUnusableException.hpp"
+#include "../Exception/NotValidSlotIdException.hpp"
 
 Item * Inventory::buffer[3][9] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
@@ -66,7 +67,6 @@ void Inventory::giveItem() {
     if (!Item::keyExists(itemName)) {
         throw new NotValidItemNameException;
     }
-
 
     if (!isNumber) {
         throw new NotIntegerException;
@@ -133,28 +133,29 @@ void Inventory::discardItem() {
 
     int slotId = stoi(inventorySlotId.substr(1));
 
+    if (slotId < 0 || slotId > 26) {
+        throw new NotValidSlotIdException(true);
+    }
+
     int row = (slotId / 9), col = (slotId % 9);
 
-    if (slotId < 0 || slotId > 26) {
-        cout << "\nSlot Id tidak valid.\n\n";
-    } else {
-        if (Inventory::buffer[row][col] == nullptr) {
-            throw new ItemNotExistException("I" + to_string(slotId));
-        }
 
-        if (Inventory::buffer[row][col]->getQuantity() < quantity) {
-            throw new NotEnoughItemException("I" + to_string(slotId));
-        }
-
-        Inventory::buffer[row][col]->setQuantity(Inventory::buffer[row][col]->getQuantity() - quantity);
-
-        if (Inventory::buffer[row][col]->getQuantity() == 0) {
-            delete Inventory::buffer[row][col];
-            Inventory::buffer[row][col] = nullptr;
-        }
-
-        cout << "\nItem pada inventori I" << slotId << " berhasil di-discard.\n\n";
+    if (Inventory::buffer[row][col] == nullptr) {
+        throw new ItemNotExistException("I" + to_string(slotId));
     }
+
+    if (Inventory::buffer[row][col]->getQuantity() < quantity) {
+        throw new NotEnoughItemException("I" + to_string(slotId));
+    }
+
+    Inventory::buffer[row][col]->setQuantity(Inventory::buffer[row][col]->getQuantity() - quantity);
+
+    if (Inventory::buffer[row][col]->getQuantity() == 0) {
+        delete Inventory::buffer[row][col];
+        Inventory::buffer[row][col] = nullptr;
+    }
+
+    cout << "\nItem pada inventori I" << slotId << " berhasil di-discard.\n\n";
 }
 
 void Inventory::moveInventory() {
@@ -205,9 +206,11 @@ void Inventory::moveInventory() {
 
             if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
                 Inventory::buffer[rowTarget][colTarget] = Item::createItem(temp->getName(), 1);
+
                 if (temp->isTool()) {
                     ((Tool *)Inventory::buffer[rowTarget][colTarget])->setDurability(((Tool *)temp)->getDurability());
                 }
+
             } else {
                 if (Inventory::buffer[rowTarget][colTarget]->getId() != temp->getId()) {
                     throw new DifferentItemException("C" + to_string(slotIdSrc), "I" + to_string(slotIdTarget));
@@ -285,24 +288,28 @@ void Inventory::useInventory() {
 
     int slotId = stoi(inventorySlotId.substr(1));
 
+    if (slotId < 0 || slotId > 26) {
+        throw new NotValidSlotIdException(true);
+    }
+
     int row = slotId / 9, col = slotId % 9;
 
     if (Inventory::buffer[row][col] == nullptr) {
         throw new ItemNotExistException("I" + to_string(slotId));
     }
 
-    if (Inventory::buffer[row][col]->isTool()) {
-        ((Tool*)Inventory::buffer[row][col])->useTool();
-        cout << "\nTool pada inventori I" << slotId << " digunakan.\n";
-        if (((Tool*)Inventory::buffer[row][col])->getDurability() <= 0) {
-            cout << "Durability habis, Tool hancur.\n";
-            delete Inventory::buffer[row][col];
-            Inventory::buffer[row][col] = nullptr;
-        }
-        cout << '\n';
-    } else {
+    if (!Inventory::buffer[row][col]->isTool()) {
         throw new NonToolUnusableException(slotId);
     }
+
+    ((Tool*)Inventory::buffer[row][col])->useTool();
+    cout << "\nTool pada inventori I" << slotId << " digunakan.\n";
+    if (((Tool*)Inventory::buffer[row][col])->getDurability() <= 0) {
+        cout << "Durability habis, Tool hancur.\n";
+        delete Inventory::buffer[row][col];
+        Inventory::buffer[row][col] = nullptr;
+    }
+    cout << '\n';
 }
 
 int** Inventory::output() {
