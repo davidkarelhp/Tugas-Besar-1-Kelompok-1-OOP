@@ -5,11 +5,11 @@
 #include "BaseException.hpp"
 using namespace std;
 
-class NotValidItemName: public BaseException {
+class NotValidItemNameException: public BaseException {
 public:
     // menuliskan pesan kesalahan ke stdout
     string message() {
-        return "Nama item yang dimasukkan tidak valid! (Tidak ada di file konfigurasi item)";
+        return "Nama item yang dimasukkan tidak valid! (Tidak ada di file konfigurasi item).";
     }
 };
 
