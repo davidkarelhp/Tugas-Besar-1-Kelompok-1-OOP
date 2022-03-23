@@ -263,8 +263,9 @@ void Crafting::craft() {
             limitj = endLeftIdx[1];
             arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
 
-            arr = new string[arrLength];
+            arr = new string[arrLength + 2];
 
+            // cout << " here " << endLeftIdx[1] << "\n";
             idx = 0;
             for (i = startLeftIdx[0]; i <= endLeftIdx[0]; i++) {
                 if (i == startLeftIdx[0]) {
@@ -276,12 +277,18 @@ void Crafting::craft() {
                 for (; (j < 3 && i != endLeftIdx[0]) || j <= limitj; j++) {
                     if (Crafting::craftingTable[i][j] == nullptr) {
                         arr[idx] = "-";
-                    } else {
+
+                    } 
+                    else {
                         arr[idx] = Crafting::craftingTable[i][j]->getName();
+                        // cout << "j: " << j << '\n';
                         if (j > limitj) {
                             limitj = j;
+                            arrLength++;
                         }
                     }
+                    // cout << i << " " << j << '\n';
+                    // cout << idx << '\n';
                     idx++;
                 }
             }
@@ -301,9 +308,10 @@ void Crafting::craft() {
             delete[] arr;
 
             if (!found) {
+                // cout << '\n';
                 limitj = endRightIdx[1];
                 arrLength = (endRightIdx[0] * 3 + (2 - endRightIdx[1])) - (startRightIdx[0] * 3 + (2 - startRightIdx[1])) + 1;
-                arr = new string[arrLength];
+                arr = new string[arrLength + 2];
 
                 idx = 0;
 
@@ -321,9 +329,13 @@ void Crafting::craft() {
                             arr[idx] = Crafting::craftingTable[i][j]->getName();
                             if (j < limitj) {
                                 limitj = j;
+                                arrLength++;
                             }
                         }
-                        idx++;
+
+                        // cout << i << " " << j << '\n';
+                        // cout << idx << '\n';
+                        // idx++;
                     }
                 }
             // cout << "\narrLength: " << arrLength << '\n';
