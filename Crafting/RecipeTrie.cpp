@@ -35,16 +35,10 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
     TrieNode * currentNode;
     int i;
     bool found = false;
-
-    // cout << "\n";
     Triplet<string, int, int> * resultTriplet = new Triplet<string, int, int>();
     resultTriplet->setFirst(result);
     resultTriplet->setSecond(quantity);
     resultTriplet->setThird(row);
-
-    // pair<string, int> * resultPair = new pair<string, int>();
-    // resultPair->first = result;
-    // resultPair->second = quantity;
     
     currentNode = this->root;
     int currentIdx = 0;
@@ -70,21 +64,11 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
                 }
                 // cout << "- ";
                 currentNode = currentNode->get("-");
-            } else if (i == row - 1) {
-                // cout << "* ";
-                currentNode->set("*", (TrieNode*)resultTriplet);
-                if (currentNode->get("-") == nullptr) {
-                    currentNode->set("-", new TrieNode());
-                }
-                currentNode = currentNode->get("-");
             } 
         }
     }
     // cout << "\n";
     currentNode->set("*", (TrieNode*)resultTriplet);
-
-
-    // currentNode->set("*", (TrieNode*)resultPair);
 }
 
 

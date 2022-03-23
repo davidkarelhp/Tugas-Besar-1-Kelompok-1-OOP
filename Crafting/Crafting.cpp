@@ -260,32 +260,27 @@ void Crafting::craft() {
         } else {
             string * arr;
             Triplet<string, int , int> * temp = new Triplet<string, int , int>;
-            if (startLeftIdx[0] != endLeftIdx[0]) {
-                arrLength = (endLeftIdx[0] - startLeftIdx[0] + 1) * 3 - startLeftIdx[1];
-                limitj = 2;
-            } else  {
-                arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
-                limitj = endLeftIdx[1];
-            }
+            limitj = endLeftIdx[1];
+            arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
 
             arr = new string[arrLength];
 
             idx = 0;
-
             for (i = startLeftIdx[0]; i <= endLeftIdx[0]; i++) {
                 if (i == startLeftIdx[0]) {
                     j = startLeftIdx[1];
-
                 } else {
                     j = 0;
                 }
 
                 for (; (j < 3 && i != endLeftIdx[0]) || j <= limitj; j++) {
-
                     if (Crafting::craftingTable[i][j] == nullptr) {
                         arr[idx] = "-";
                     } else {
                         arr[idx] = Crafting::craftingTable[i][j]->getName();
+                        if (j > limitj) {
+                            limitj = j;
+                        }
                     }
                     idx++;
                 }
@@ -306,14 +301,8 @@ void Crafting::craft() {
             delete[] arr;
 
             if (!found) {
-
-                if (startLeftIdx[0] != endLeftIdx[0]) {
-                    arrLength = (endLeftIdx[0] - startLeftIdx[0] + 1) * 3 - (2 - startRightIdx[1]);
-                    limitj = 0;
-                } else  {
-                    arrLength = (endRightIdx[0] * 3 + (2 - endRightIdx[1])) - (startRightIdx[0] * 3 + (2 - startRightIdx[1])) + 1;
-                    limitj = endRightIdx[1];
-                }
+                limitj = endRightIdx[1];
+                arrLength = (endRightIdx[0] * 3 + (2 - endRightIdx[1])) - (startRightIdx[0] * 3 + (2 - startRightIdx[1])) + 1;
                 arr = new string[arrLength];
 
                 idx = 0;
@@ -321,7 +310,6 @@ void Crafting::craft() {
                 for (i = startRightIdx[0]; i <= endRightIdx[0]; i++) {
                     if (i == startRightIdx[0]) {
                         j = startRightIdx[1];
-
                     } else {
                         j = 2;
                     }
@@ -331,10 +319,18 @@ void Crafting::craft() {
                             arr[idx] = "-";
                         } else {
                             arr[idx] = Crafting::craftingTable[i][j]->getName();
+                            if (j < limitj) {
+                                limitj = j;
+                            }
                         }
                         idx++;
                     }
                 }
+            // cout << "\narrLength: " << arrLength << '\n';
+            // for (int k = 0; k < arrLength; k++) {
+            //     cout << arr[k] << " ";
+            // }
+            // cout << "\n\n";
 
                 temp = Crafting::trie.checkRecipe(arr, arrLength, endRightIdx[0] - startRightIdx[0] + 1);
 

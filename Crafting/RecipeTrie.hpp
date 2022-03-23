@@ -12,15 +12,11 @@ using namespace std;
 class RecipeTrie {
     private:
         TrieNode * root;
-
         TrieNode * getLastNode(string*, int);
 
     public:
         RecipeTrie();
-
         void buildRecipe(int, int, string*, string, int);
-
-
         Triplet<string, int, int> * checkRecipe(string*, int, int);
 };
 
