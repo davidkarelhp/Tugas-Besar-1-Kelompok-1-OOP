@@ -1,6 +1,4 @@
 #include "RecipeTrie.hpp"
-#include "../Item/Item.hpp"
-#include "../Item/Triplet.hpp"
 
 
 RecipeTrie::RecipeTrie() {
@@ -14,7 +12,7 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
     currentNode = this->root;
     for (int i = 0; i < n; i++) {
         if (currentNode->get(recipeArr[i]) == nullptr) {
-            temp = Item::getMap(recipeArr[i]).getTypeItem();
+            temp = Item::getMap(recipeArr[i]).getSecond();
             // cout << "type : " << temp << '\n';
             if (temp == "-") {
                 return nullptr;
@@ -39,9 +37,14 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
     bool found = false;
 
     // cout << "\n";
-    pair<string, int> * resultPair = new pair<string, int>();
-    resultPair->first = result;
-    resultPair->second = quantity;
+    Triplet<string, int, int> * resultTriplet = new Triplet<string, int, int>();
+    resultTriplet->setFirst(result);
+    resultTriplet->setSecond(quantity);
+    resultTriplet->setThird(row);
+
+    // pair<string, int> * resultPair = new pair<string, int>();
+    // resultPair->first = result;
+    // resultPair->second = quantity;
     
     currentNode = this->root;
     int currentIdx = 0;
@@ -69,7 +72,7 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
                 currentNode = currentNode->get("-");
             } else if (i == row - 1) {
                 // cout << "* ";
-                currentNode->set("*", (TrieNode*)resultPair);
+                currentNode->set("*", (TrieNode*)resultTriplet);
                 if (currentNode->get("-") == nullptr) {
                     currentNode->set("-", new TrieNode());
                 }
@@ -78,16 +81,17 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
         }
     }
     // cout << "\n";
+    currentNode->set("*", (TrieNode*)resultTriplet);
 
 
-    currentNode->set("*", (TrieNode*)resultPair);
+    // currentNode->set("*", (TrieNode*)resultPair);
 }
 
 
-pair<string, int> * RecipeTrie::checkRecipe(string* recipeArr, int n) {
+Triplet<string, int, int> * RecipeTrie::checkRecipe(string* recipeArr, int n, int rowCount) {
     TrieNode * temp = this->getLastNode(recipeArr, n);
-    if (temp != nullptr && temp->get("*") != nullptr) {
-        return (pair<string, int> *)temp->get("*");
+    if (temp != nullptr && temp->get("*") != nullptr && ((Triplet<string, int, int> *)temp->get("*"))->getThird() == rowCount) {
+        return (Triplet<string, int, int> *)temp->get("*");
     } else {
         return nullptr;
     }

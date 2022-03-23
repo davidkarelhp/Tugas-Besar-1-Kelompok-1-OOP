@@ -259,7 +259,7 @@ void Crafting::craft() {
             }
         } else {
             string * arr;
-            pair<string, int> * temp = new pair<string, int>();
+            Triplet<string, int , int> * temp = new Triplet<string, int , int>;
             if (startLeftIdx[0] != endLeftIdx[0]) {
                 arrLength = (endLeftIdx[0] - startLeftIdx[0] + 1) * 3 - startLeftIdx[1];
                 limitj = 2;
@@ -297,7 +297,7 @@ void Crafting::craft() {
             // }
             // cout << "\n\n";
 
-            temp = Crafting::trie.checkRecipe(arr, arrLength);
+            temp = Crafting::trie.checkRecipe(arr, arrLength, endLeftIdx[0] - startLeftIdx[0] + 1);
 
             if (temp != nullptr) {
                 found = true;
@@ -336,7 +336,7 @@ void Crafting::craft() {
                     }
                 }
 
-                temp = Crafting::trie.checkRecipe(arr, arrLength);
+                temp = Crafting::trie.checkRecipe(arr, arrLength, endRightIdx[0] - startRightIdx[0] + 1);
 
                 if (temp != nullptr) {
                     found = true;
@@ -348,8 +348,8 @@ void Crafting::craft() {
             if (!found) {
                 cout << "\nTidak ada resep yang cocok dengan konfigurasi item pada crafting table.\n\n";
             } else {
-                cout << "\nItem yang di-craft adalah " << temp->first << " dengan jumlah " << temp->second << ".\n";
-                Inventory::giveAlgorithm(temp->first, temp->second, 0);
+                cout << "\nItem yang di-craft adalah " << temp->getFirst() << " dengan jumlah " << temp->getSecond() << ".\n";
+                Inventory::giveAlgorithm(temp->getFirst(), temp->getSecond(), 0);
                 delete temp;
                 Crafting::clear();
             }

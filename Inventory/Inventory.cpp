@@ -78,12 +78,12 @@ void Inventory::giveItem() {
 }
 
 void Inventory::giveAlgorithm(string itemName, int itemQuantity, int durability) {
-    Triplet triplet;
+    Triplet<int, string, bool> triplet;
     int itemReduced, initialQuantity;
     triplet = Item::getMap(itemName);
     initialQuantity = itemQuantity;
 
-    if (!triplet.isTool()) {
+    if (!triplet.getThird()) {
         for (int i = 0; i < 3 && itemQuantity > 0; i++) {
             for (int j = 0; j < 9 && itemQuantity > 0; j++) {
                 if (Inventory::buffer[i][j] != nullptr) {
@@ -101,7 +101,7 @@ void Inventory::giveAlgorithm(string itemName, int itemQuantity, int durability)
         for (int i = 0; i < 3 && itemQuantity > 0; i++) {
             for (int j = 0; j < 9 && itemQuantity > 0; j++) {
                 if (Inventory::buffer[i][j] == nullptr){
-                    if (!triplet.isTool()) {
+                    if (!triplet.getThird()) {
                         itemReduced = min(64, itemQuantity);
                     } else {
                         itemReduced = 1;

@@ -9,7 +9,7 @@ using namespace std;
 
 class Item {
     protected:
-        static unordered_map<string, Triplet> itemMap;
+        static unordered_map<string, Triplet<int, string, bool>> itemMap;
 
         // Atribut objek/instans
         int id;
@@ -30,10 +30,10 @@ class Item {
 
         void setQuantity(int val);
 
-        static void setMap(string key, Triplet value) {
+        static void setMap(string key, Triplet<int, string, bool> value) {
             Item::itemMap[key] = value;
         }
-        static Triplet getMap(string key) {
+        static Triplet<int, string, bool> getMap(string key) {
             return Item::itemMap[key];
         }
         static Item * createItem(string name, int quantity);

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-unordered_map<string, Triplet> Item::itemMap = unordered_map<string, Triplet>();
+unordered_map<string, Triplet<int, string, bool>> Item::itemMap = unordered_map<string, Triplet<int, string, bool>>();
 
 Item::Item() {}
 
@@ -36,13 +36,13 @@ void Item::setQuantity(int val) {
 }
 
 Item * Item::createItem(string name, int quantity) {
-    Triplet triplet;
+    Triplet<int, string, bool> triplet;
     triplet = Item::getMap(name);
     
-    if (triplet.isTool()) {
-        return new Tool(triplet.getId(), name, triplet.getTypeItem(), quantity);
+    if (triplet.getThird()) {
+        return new Tool(triplet.getFirst(), name, triplet.getSecond(), quantity);
     } else {
-        return new NonTool(triplet.getId(), name, triplet.getTypeItem(), quantity);
+        return new NonTool(triplet.getFirst(), name, triplet.getSecond(), quantity);
     }
 }
 

@@ -3,18 +3,38 @@
 
 #include <iostream>
 
+template <class T1, class T2, class T3>
 class Triplet {
     private:
-        int id;
-        std::string typeItem;
-        bool tool;
+        T1 first;
+        T2 second;
+        T3 third;
     public:
-        Triplet();
-        Triplet(int id, std::string typeItem, bool tool);
-        int getId();
-        std::string getTypeItem();
-        bool isTool();
+        Triplet() {}
+        Triplet(T1 first, T2 second, T3 third) {
+            this->first = first;
+            this->second = second;
+            this->third = third;
+        }
+        T1 getFirst() {
+            return this->first;
+        }
+        T2 getSecond() {
+            return this->second;
+        }
+        T3 getThird() {
+            return this->third;
+        }
 
+        void setFirst(T1 first) {
+            this->first = first;
+        }
+        void setSecond(T2 second) {
+            this->second = second;
+        }
+        void setThird(T3 third) {
+            this->third = third;
+        }
 };
 
 #endif

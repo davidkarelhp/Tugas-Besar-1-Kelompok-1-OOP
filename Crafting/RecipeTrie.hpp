@@ -4,6 +4,8 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include "TrieNode.hpp"
+#include "../Item/Item.hpp"
+#include "../Item/Triplet.hpp"
 
 using namespace std;
 
@@ -19,7 +21,7 @@ class RecipeTrie {
         void buildRecipe(int, int, string*, string, int);
 
 
-        pair<string, int> * checkRecipe(string*, int);
+        Triplet<string, int, int> * checkRecipe(string*, int, int);
 };
 
 #endif
