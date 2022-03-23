@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include "../IO/inputItem/InputItem.hpp"
 #include "../IO/inputRecipe/InputRecipe.hpp"
+#include "../IO/outputFile/OutputFile.hpp"
 #include "../Inventory/Inventory.hpp"
 #include <filesystem>
 
@@ -58,16 +59,7 @@ void Player::play()
         {
             string outputPath;
             cin >> outputPath;
-            ofstream outputFile(outputPath);
-
-            // hardcode for first test case
-            outputFile << "21:10" << endl;
-            outputFile << "6:1" << endl;
-            for (int i = 2; i < 27; i++)
-            {
-                outputFile << "0:0" << endl;
-            }
-
+            OutputFile::outputFile(outputPath);
             cout << "Exported" << endl;
         }
         else if (command == "CRAFT")

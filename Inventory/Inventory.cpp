@@ -276,3 +276,27 @@ void Inventory::useInventory() {
         }
     }
 }
+
+int** Inventory::output() {
+
+    int ** ret = new int*[27];
+    Item * temp;
+    for (int i = 0; i < 27; i++) {
+        ret[i] = new int[2];
+    }
+
+    for (int i = 0; i < 27; i++) {
+        temp = Inventory::buffer[i / 9][i % 9];
+        if (temp != nullptr) {
+            ret[i][0] = temp->getId();
+            ret[i][1] = temp->isTool() ? ((Tool*)temp)->getDurability() : temp->getQuantity();
+        }
+        else {
+            ret[i][0] = 0;
+            ret[i][1] = 0;
+        }
+    }
+    return ret;
+
+
+}
