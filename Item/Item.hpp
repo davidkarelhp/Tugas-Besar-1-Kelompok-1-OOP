@@ -38,6 +38,8 @@ class Item {
         }
         static Item * createItem(string name, int quantity);
 
+        static bool keyExists(string);
+
         virtual bool isTool() =  0;
 };
 

@@ -3,6 +3,7 @@
 #include "../Item/Item.hpp"
 #include "../Crafting/Crafting.hpp"
 #include "../Exception/NotIntegerException.hpp"
+#include "../Exception/NotValidItemName.hpp"
 
 Item * Inventory::buffer[3][9] = {
     {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr},
@@ -57,8 +58,10 @@ void Inventory::giveItem() {
     }
 
     // Cek Item name valid atau tidak di sini
+    if (!Item::keyExists(itemName)) {
+        throw new NotValidItemName;
+    }
 
-    // Cek Item adalah non tool di sini
 
     if (!isNumber) {
         throw new NotIntegerException;

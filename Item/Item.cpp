@@ -45,3 +45,7 @@ Item * Item::createItem(string name, int quantity) {
         return new NonTool(triplet.getId(), name, triplet.getTypeItem(), quantity);
     }
 }
+
+bool Item::keyExists(string key) {
+    return Item::itemMap.find(key) != Item::itemMap.end();
+}

@@ -95,9 +95,9 @@ void Player::play()
                 cout << "Invalid command" << endl;
             }
         } catch (exception& err) {
-            cout << err.what() << endl;
+            cout << '\n' << err.what() << "\n\n";
         } catch (BaseException * err) {
-            cout << err->message() << endl;
+            cout << '\n' << err->message() << "\n\n";
         }
         cout << "Masukkan command: ";
     }
