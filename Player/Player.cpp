@@ -55,43 +55,49 @@ void Player::play()
     cout << "Masukkan command: ";
     while (cin >> command)
     {
-        if (command == "EXPORT")
-        {
-            string outputPath;
-            cin >> outputPath;
-            OutputFile::outputFile(outputPath);
-            cout << "Exported" << endl;
-        }
-        else if (command == "CRAFT")
-        {
-            // cout << "TODO" << endl;
-            Crafting::craft();
-        }
-        else if (command == "GIVE")
-        {
-            Inventory::giveItem();
-        }
-        else if (command == "DISCARD")
-        {
-            Inventory::discardItem();
-        }
-        else if (command == "MOVE")
-        {
-            Inventory::moveInventory();
-        }
-        else if (command == "USE")
-        {
-            Inventory::useInventory();
-        }
-        else if (command == "SHOW")
-        {
-            Crafting::showCraftingTable();
-            Inventory::showItem();
-        }
-        else
-        {
-            // todo
-            cout << "Invalid command" << endl;
+        try {
+            if (command == "EXPORT")
+            {
+                string outputPath;
+                cin >> outputPath;
+                OutputFile::outputFile(outputPath);
+                cout << "Exported" << endl;
+            }
+            else if (command == "CRAFT")
+            {
+                // cout << "TODO" << endl;
+                Crafting::craft();
+            }
+            else if (command == "GIVE")
+            {
+                Inventory::giveItem();
+            }
+            else if (command == "DISCARD")
+            {
+                Inventory::discardItem();
+            }
+            else if (command == "MOVE")
+            {
+                Inventory::moveInventory();
+            }
+            else if (command == "USE")
+            {
+                Inventory::useInventory();
+            }
+            else if (command == "SHOW")
+            {
+                Crafting::showCraftingTable();
+                Inventory::showItem();
+            }
+            else
+            {
+                // todo
+                cout << "Invalid command" << endl;
+            }
+        } catch (exception& err) {
+            cout << err.what() << endl;
+        } catch (BaseException * err) {
+            cout << err->message() << endl;
         }
         cout << "Masukkan command: ";
     }
