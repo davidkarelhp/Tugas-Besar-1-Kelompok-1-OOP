@@ -8,7 +8,6 @@ using namespace std;
 unordered_map<string, Triplet<int, string, bool>> Item::itemMap = unordered_map<string, Triplet<int, string, bool>>();
 
 Item::Item() {}
-
 Item::Item(int id, string name, string type, int quantity) {
     this->id = id;
     this->name = name;
@@ -17,7 +16,8 @@ Item::Item(int id, string name, string type, int quantity) {
 }
 Item::Item(const Item& item) {}
 Item::~Item() {}
-    
+
+// Getter
 int Item::getId() const {
     return this->id;
 }
@@ -30,7 +30,8 @@ string Item::getType() const {
 int Item::getQuantity() const {
     return this->quantity;
 }
-        
+
+// Setter
 void Item::setQuantity(int val) {
     this->quantity = val;
 }
@@ -39,9 +40,11 @@ Item * Item::createItem(string name, int quantity) {
     Triplet<int, string, bool> triplet;
     triplet = Item::getMap(name);
     
-    if (triplet.getThird()) {
+    // If item is a tool (boolean is true), method will return new tool
+    // Else if item is a non tool (boolean is false), method will return new nontool
+    if (triplet.getThird()) {      
         return new Tool(triplet.getFirst(), name, triplet.getSecond(), quantity);
-    } else {
+    } else {            
         return new NonTool(triplet.getFirst(), name, triplet.getSecond(), quantity);
     }
 }

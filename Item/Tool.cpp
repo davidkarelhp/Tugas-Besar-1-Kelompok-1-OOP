@@ -4,10 +4,12 @@ Tool::Tool(int id, string name, string type, int quantity) : Item(id, name, type
     this->durability = 10;
 }
 
+// Getter
 int Tool::getDurability() const {
     return this->durability;
 }
 
+// Setter
 void Tool::setDurability(int durability) {
     this->durability = durability;
 }
