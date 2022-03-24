@@ -8,6 +8,7 @@ int Crafting::startRightIdx[2] = {-1, -1};
 int Crafting::endRightIdx[2] = {-1, -1};
 int Crafting::filledSlot = 0;
 int Crafting::toolsQuantity = 0;
+int Crafting::minQuantity = 0;
 
 RecipeTrie Crafting::trie = RecipeTrie();
 
@@ -43,15 +44,24 @@ void Crafting::showCraftingTable() {
         }
         cout << '\n';
     }
+    Triplet<string, int, int> * temp = new Triplet<string, int, int>();
+
+    temp = Crafting::checkCraftingConfiguration();
+
+    if (temp == nullptr) {
+        cout << "HASIL CRAFTING: -\n";
+    } else {
+        cout << "HASIL CRAFTING: " << temp->getFirst() << " dengan jumlah " << temp->getSecond() * Crafting::minQuantity << '\n';
+    }
     cout << '\n';
 }
 
-void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
-    int row = slotId / 3, col = slotId % 3;
+void Crafting::setCraftingSlot(int slotId, Item * item) {
+    int row = slotId / 3, col = slotId % 3, quantity;
     // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
     // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
 
-    if (item != nullptr) {
+    if (Crafting::craftingTable[row][col] == nullptr) {
         if (startLeftIdx[0] == -1) {
             startLeftIdx[0] = row;
             startLeftIdx[1] = col;
@@ -95,134 +105,61 @@ void Crafting::setCraftingSlot(int slotId, Item * item, bool del) {
                 }
             }
         }
-    } else {
-        bool found;
 
-        found = false;
-        if (row == startLeftIdx[0] && col == startLeftIdx[1]) {
-            for (int i = slotId + 1; i < 9 && !found; i++) {
+        if (item->isTool()) {
+            Crafting::toolsQuantity += 1;
+        }
+        Crafting::filledSlot += 1;
+        Crafting::craftingTable[row][col] = item;
+        // quantity = 1;
+        Crafting::minQuantity = 1;
+    } else {
+        if (item->getId() == Crafting::craftingTable[row][col]->getId()) {
+            Crafting::craftingTable[row][col]->setQuantity(Crafting::craftingTable[row][col]->getQuantity() + 1);
+        }
+        quantity = Crafting::craftingTable[row][col]->getQuantity() + 1;
+
+        if (Crafting::craftingTable[row][col]->getQuantity() - 1 == Crafting::minQuantity) {
+            bool found = false;
+            int i, j, tempMin;
+
+            tempMin = 100;
+
+            for (i = startLeftIdx[0] * 3 + startLeftIdx[1]; i < 9; i++) {
                 if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
                     found = true;
+                    if (Crafting::craftingTable[i / 3][i % 3]->getQuantity() < tempMin) {
+                        tempMin = Crafting::craftingTable[i / 3][i % 3]->getQuantity();
+                    }
                 }
             }
 
-            if (found) {
-                startLeftIdx[0] = row;
-                startLeftIdx[1] = col;
-                found = false;
-            } else {
-                startLeftIdx[0] = -1;
-                startLeftIdx[1] = -1;
-            }
+            Crafting::minQuantity = found ? tempMin : 0;
         }
-
-
-        if (row == endLeftIdx[0] && col == endLeftIdx[1]) {
-            for (int i = slotId - 1; i >= 9 && !found; i++) {
-                if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
-                    found = true;
-                }
-            }
-            if (found) {
-                endLeftIdx[0] = row;
-                endLeftIdx[1] = col;
-                found = false;
-
-            } else {
-                endLeftIdx[0] = -1;
-                endLeftIdx[1] = -1;
-
-            }
-        }
-
-
-    if (row == startRightIdx[0] && col == startRightIdx[1]) {
-        int i_loop, j_loop;
-        if (row % 3 == 2) {
-            i_loop = row - 1;
-            i_loop = 0;
-        } else {
-            i_loop = row;
-            j_loop = col + 1;
-        }
-
-        for (; i_loop < 3; i_loop++) {
-            for (; j_loop >= 0; j_loop--) {
-                if (Crafting::craftingTable[i_loop][j_loop] != nullptr) {
-                    found = true;
-                }
-            }
-        }
-
-        if (found) {
-            endRightIdx[0] = row;
-            endRightIdx[1] = col;
-            found = false;
-        } else {
-            endRightIdx[0] = -1;
-            endRightIdx[1] = -1;
-        }
-    }
-
-    if (row == endRightIdx[0] && col == endRightIdx[1]) {
-        int i_loop, j_loop;
-        if (row % 3 == 2) {
-            i_loop = row - 1;
-            j_loop = 0;
-        } else {
-            i_loop = row;
-            j_loop = col + 1;
-        }
-
-        for (; i_loop >= 0; i_loop--) {
-            for (; j_loop < 0; j_loop++) {
-                if (Crafting::craftingTable[i_loop][j_loop] != nullptr) {
-                    found = true;
-                }
-            }
-        }
-
-        if (found) {
-                startRightIdx[0] = row;
-                startRightIdx[1] = col;
-                found = false;
-            } else {
-                startRightIdx[0] = -1;
-                startRightIdx[1] = -1;
-            }
-        }
-
-    }
-
-    if (Crafting::craftingTable[row][col] == nullptr) {
-        if (item != nullptr) {
-            if (item->isTool()) {
-                Crafting::toolsQuantity += 1;
-            }
-            Crafting::filledSlot += 1;
-        }
-    } else {
-        if (item == nullptr) {
-            if (Crafting::craftingTable[row][col]->isTool()) {
-                Crafting::toolsQuantity -= 1;
-            }
-            Crafting::filledSlot -= 1;
-        } else {
-            if (item->isTool() && !Crafting::craftingTable[row][col]->isTool()) {
-                Crafting::toolsQuantity += 1;
-            } else if (!item->isTool() && Crafting::craftingTable[row][col]->isTool()) {
-                Crafting::toolsQuantity -= 1;
-            }
-        }
-    }
-
-    // cout << Crafting::toolsQuantity << " " << Crafting::filledSlot << "here\n";
-
-    if (Crafting::craftingTable[row][col] != nullptr && del) {
-        delete Crafting::craftingTable[row][col];
+        delete item;
     }
     
-    Crafting::craftingTable[row][col] = item;
+    // if (Crafting::minQuantity <= 0 || quantity < Crafting::minQuantity) {
+    //     Crafting::minQuantity = quantity;
+    // } 
+    // else {
+    //     if (quantity < Crafting::minQuantity) {
+    //         Crafting::minQuantity = quantity;
+    //     }
+    // }
+    // if (item->isTool() && !Crafting::craftingTable[row][col]->isTool()) {
+    //     Crafting::toolsQuantity += 1;
+    // } else if (!item->isTool() && Crafting::craftingTable[row][col]->isTool()) {
+    //     Crafting::toolsQuantity -= 1;
+    // }
+
+    // if (Crafting::minQuantity < )
+    // cout << Crafting::toolsQuantity << " " << Crafting::filledSlot << "here\n";
+
+    // if (Crafting::craftingTable[row][col] != nullptr && del) {
+    //     delete Crafting::craftingTable[row][col];
+    // }
+    
     // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
     // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
     // cout << "finish set\n";
@@ -252,119 +189,129 @@ void Crafting::craft() {
                     ((Tool*)Crafting::craftingTable[Crafting::endLeftIdx[0]][Crafting::endLeftIdx[1]])->getDurability()
                 ));
                 // cout << ((Tool*)Crafting::craftingTable[Crafting::startLeftIdx[0]][Crafting::startLeftIdx[1]])->getDurability() << " " << ((Tool*)Crafting::craftingTable[Crafting::endLeftIdx[0]][Crafting::endLeftIdx[1]])->getDurability() << '\n';
-                Crafting::clear();
+                Crafting::clear(Crafting::minQuantity);
 
             } else {
                 cout << "\nTidak ada resep yang cocok dengan konfigurasi item pada crafting table.\n\n";
             }
         } else {
-            string * arr;
-            Triplet<string, int , int> * temp = new Triplet<string, int , int>;
-            limitj = endLeftIdx[1];
-            arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
-
-            arr = new string[arrLength + 2];
-
-            // cout << " here " << endLeftIdx[1] << "\n";
-            idx = 0;
-            for (i = startLeftIdx[0]; i <= endLeftIdx[0]; i++) {
-                if (i == startLeftIdx[0]) {
-                    j = startLeftIdx[1];
-                } else {
-                    j = 0;
-                }
-
-                for (; (j < 3 && i != endLeftIdx[0]) || j <= limitj; j++) {
-                    if (Crafting::craftingTable[i][j] == nullptr) {
-                        arr[idx] = "-";
-
-                    } 
-                    else {
-                        arr[idx] = Crafting::craftingTable[i][j]->getName();
-                        // cout << "j: " << j << '\n';
-                        if (j > limitj) {
-                            limitj = j;
-                            arrLength++;
-                        }
-                    }
-                    // cout << i << " " << j << '\n';
-                    // cout << idx << '\n';
-                    idx++;
-                }
-            }
-
-            // cout << "\narrLength: " << arrLength << '\n';
-            // for (int k = 0; k < arrLength; k++) {
-            //     cout << arr[k] << " ";  
-            // }
-            // cout << "\n\n";
-
-            temp = Crafting::trie.checkRecipe(arr, arrLength, endLeftIdx[0] - startLeftIdx[0] + 1);
-
-            if (temp != nullptr) {
-                found = true;
-            } 
-
-            delete[] arr;
-
-            if (!found) {
-                // cout << '\n';
-                limitj = endRightIdx[1];
-                arrLength = (endRightIdx[0] * 3 + (2 - endRightIdx[1])) - (startRightIdx[0] * 3 + (2 - startRightIdx[1])) + 1;
-                arr = new string[arrLength + 2];
-
-                idx = 0;
-
-                for (i = startRightIdx[0]; i <= endRightIdx[0]; i++) {
-                    if (i == startRightIdx[0]) {
-                        j = startRightIdx[1];
-                    } else {
-                        j = 2;
-                    }
-
-                    for (; (j >= 0 && i != endRightIdx[0]) || j >= limitj; j--) {
-                        if (Crafting::craftingTable[i][j] == nullptr) {
-                            arr[idx] = "-";
-                        } else {
-                            arr[idx] = Crafting::craftingTable[i][j]->getName();
-                            if (j < limitj) {
-                                limitj = j;
-                                arrLength++;
-                            }
-                        }
-
-                        // cout << i << " " << j << '\n';
-                        // cout << idx << '\n';
-                        idx++;
-                    }
-                }
-            // cout << "\narrLength: " << arrLength << '\n';
-            // for (int k = 0; k < arrLength; k++) {
-            //     cout << arr[k] << " ";
-            // }
-            // cout << "\n\n";
-
-                temp = Crafting::trie.checkRecipe(arr, arrLength, endRightIdx[0] - startRightIdx[0] + 1);
-
-                if (temp != nullptr) {
-                    found = true;
-                } 
-            
-                delete[] arr;
-            }
-
-            if (!found) {
+            Triplet<string, int, int> * temp = new Triplet<string, int , int>;
+            temp = Crafting::checkCraftingConfiguration();
+            if (temp == nullptr) {
                 cout << "\nTidak ada resep yang cocok dengan konfigurasi item pada crafting table.\n\n";
             } else {
-                cout << "\nItem yang di-craft adalah " << temp->getFirst() << " dengan jumlah " << temp->getSecond() << ".\n";
-                Inventory::giveAlgorithm(temp->getFirst(), temp->getSecond(), 0);
+                cout << "\nItem yang di-craft adalah " << temp->getFirst() << " dengan jumlah " << temp->getSecond() * Crafting::minQuantity << ".\n";
+                Inventory::giveAlgorithm(temp->getFirst(), temp->getSecond() * Crafting::minQuantity, 0);
                 // delete temp;
-                Crafting::clear();
+                Crafting::clear(Crafting::minQuantity);
             }
         }
     }
     // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
     // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
+}
+
+Triplet<string, int, int> * Crafting::checkCraftingConfiguration() {
+    string * arr;
+    bool found;
+    int limitj, arrLength, idx, i, j;
+    Triplet<string, int , int> * temp = new Triplet<string, int , int>;
+    limitj = endLeftIdx[1];
+    arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
+
+    arr = new string[arrLength + 2];
+
+    // cout << " here " << endLeftIdx[1] << "\n";
+    idx = 0;
+    for (i = startLeftIdx[0]; i <= endLeftIdx[0]; i++) {
+        if (i == startLeftIdx[0]) {
+            j = startLeftIdx[1];
+        } else {
+            j = 0;
+        }
+
+        for (; (j < 3 && i != endLeftIdx[0]) || j <= limitj; j++) {
+            if (Crafting::craftingTable[i][j] == nullptr) {
+                arr[idx] = "-";
+
+            } 
+            else {
+                arr[idx] = Crafting::craftingTable[i][j]->getName();
+                // cout << "j: " << j << '\n';
+                if (j > limitj) {
+                    limitj = j;
+                    arrLength++;
+                }
+            }
+            // cout << i << " " << j << '\n';
+            // cout << idx << '\n';
+            idx++;
+        }
+    }
+
+    // cout << "\narrLength: " << arrLength << '\n';
+    // for (int k = 0; k < arrLength; k++) {
+    //     cout << arr[k] << " ";  
+    // }
+    // cout << "\n\n";
+
+    temp = Crafting::trie.checkRecipe(arr, arrLength, endLeftIdx[0] - startLeftIdx[0] + 1);
+
+    if (temp != nullptr) {
+        found = true;
+    } 
+
+    delete[] arr;
+
+    if (!found) {
+        // cout << '\n';
+        limitj = endRightIdx[1];
+        arrLength = (endRightIdx[0] * 3 + (2 - endRightIdx[1])) - (startRightIdx[0] * 3 + (2 - startRightIdx[1])) + 1;
+        arr = new string[arrLength + 2];
+
+        idx = 0;
+
+        for (i = startRightIdx[0]; i <= endRightIdx[0]; i++) {
+            if (i == startRightIdx[0]) {
+                j = startRightIdx[1];
+            } else {
+                j = 2;
+            }
+
+            for (; (j >= 0 && i != endRightIdx[0]) || j >= limitj; j--) {
+                if (Crafting::craftingTable[i][j] == nullptr) {
+                    arr[idx] = "-";
+                } else {
+                    arr[idx] = Crafting::craftingTable[i][j]->getName();
+                    if (j < limitj) {
+                        limitj = j;
+                        arrLength++;
+                    }
+                }
+
+                // cout << i << " " << j << '\n';
+                // cout << idx << '\n';
+                idx++;
+            }
+        }
+    // cout << "\narrLength: " << arrLength << '\n';
+    // for (int k = 0; k < arrLength; k++) {
+    //     cout << arr[k] << " ";
+    // }
+    // cout << "\n\n";
+
+        temp = Crafting::trie.checkRecipe(arr, arrLength, endRightIdx[0] - startRightIdx[0] + 1);
+
+        if (temp != nullptr) {
+            found = true;
+        } 
+    
+        delete[] arr;
+    }
+
+    return temp;
+
+    
 }
 
 void Crafting::deleteCraftingSlot(int slotId) {
@@ -475,21 +422,46 @@ void Crafting::deleteCraftingSlot(int slotId) {
                 startRightIdx[1] = -1;
             }
         }
+        if (Crafting::craftingTable[row][col]->getQuantity() == Crafting::minQuantity) {
+            bool found = false;
+            int i, j, tempMin;
+
+            tempMin = 100;
+
+            for (i = startLeftIdx[0] * 3 + startLeftIdx[1]; i < 9; i++) {
+                if (Crafting::craftingTable[i / 3][i % 3] != nullptr) {
+                    found = true;
+                    if (Crafting::craftingTable[i / 3][i % 3]->getQuantity() < tempMin) {
+                        tempMin = Crafting::craftingTable[i / 3][i % 3]->getQuantity();
+                    }
+                }
+            }
+
+            Crafting::minQuantity = found ? tempMin : 0;
+        }
+
+        delete Crafting::craftingTable[row][col];
+        Crafting::craftingTable[row][col] = nullptr;
 
     }
 
-    delete Crafting::craftingTable[row][col];
-    Crafting::craftingTable[row][col] = nullptr;
     // cout << "start: " << startLeftIdx[0] << " " << startLeftIdx[1] << '\n';
     // cout << "end: " << endLeftIdx[0] << " " << endLeftIdx[1] << '\n';
 }
 
-void Crafting::clear() {
+void Crafting::clear(int delQuantity) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (Crafting::craftingTable[i][j] != nullptr) {
-                delete Crafting::craftingTable[i][j];
-                Crafting::craftingTable[i][j] = nullptr;
+                Crafting::craftingTable[i][j]->setQuantity(Crafting::craftingTable[i][j]->getQuantity() - delQuantity);
+                if (Crafting::craftingTable[i][j]->getQuantity() <= 0) {
+                    if (Crafting::craftingTable[i][j]->isTool()) {
+                        Crafting::toolsQuantity--;
+                    }
+                    Crafting::filledSlot--;
+                    delete Crafting::craftingTable[i][j];
+                    Crafting::craftingTable[i][j] = nullptr;
+                }
             }
         }
     }
@@ -501,6 +473,47 @@ void Crafting::clear() {
     startRightIdx[1] = -1;
     endRightIdx[0] = -1;
     endRightIdx[1] = -1;
-    Crafting::filledSlot = 0;
-    Crafting::toolsQuantity = 0;
+    bool found1 = false, found2 = false;
+    // Crafting::filledSlot = 0;
+    // Crafting::toolsQuantity = 0;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (Crafting::craftingTable[i][j] != nullptr) {
+                if (!found1) {
+                    startLeftIdx[0] = i;
+                    startLeftIdx[1] = j;
+                    endLeftIdx[0] = i;
+                    endLeftIdx[1] = j;
+                    found1 = true;
+                } else {
+                    if (i > endLeftIdx[0]) {
+                        endLeftIdx[0] = i;
+                        endLeftIdx[1] = j;
+                    } else if (i == endLeftIdx[0] && j > endLeftIdx[1]) {
+                        endLeftIdx[1] = j;
+                    }
+                }
+            }
+        }
+
+        for (int j = 2; j >= 0; j--) {
+            if (Crafting::craftingTable[i][j] != nullptr) {
+                if (!found2) {
+                    startRightIdx[0] = i;
+                    startRightIdx[1] = j;
+                    endRightIdx[0] = i;
+                    endRightIdx[1] = j;
+                    found2 = true;
+                } else {
+                    if (i > endRightIdx[0]) {
+                        endRightIdx[0] = i;
+                        endRightIdx[1] = j;
+                    } else if (i == endRightIdx[0] && j < endRightIdx[1]) {
+                        endRightIdx[1] = j;
+                    }
+                }
+            }
+        }
+    }
 }

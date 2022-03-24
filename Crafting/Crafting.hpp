@@ -12,12 +12,15 @@ class Crafting {
         static int endRightIdx[2];
         static int filledSlot;
         static int toolsQuantity;
-        static void clear();
+        static int minQuantity;
+        static void clear(int);
+        static Triplet<string, int, int> * checkCraftingConfiguration();
+
     public:
         static RecipeTrie trie;
         static Item * craftingTable[3][3];
         static void showCraftingTable();
-        static void setCraftingSlot(int, Item *, bool);
+        static void setCraftingSlot(int, Item *);
         static void deleteCraftingSlot(int);
         static Item * getCraftingSlot(int);
         static void craft();

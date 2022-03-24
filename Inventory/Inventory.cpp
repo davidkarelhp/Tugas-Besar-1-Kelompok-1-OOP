@@ -205,23 +205,33 @@ void Inventory::moveInventory() {
             }
 
             if (Inventory::buffer[rowTarget][colTarget] == nullptr) {
-                Inventory::buffer[rowTarget][colTarget] = Item::createItem(temp->getName(), 1);
+                Inventory::buffer[rowTarget][colTarget] = Item::createItem(temp->getName(), temp->getQuantity());
 
                 if (temp->isTool()) {
                     ((Tool *)Inventory::buffer[rowTarget][colTarget])->setDurability(((Tool *)temp)->getDurability());
                 }
 
+                Crafting::deleteCraftingSlot(slotIdSrc);
+                cout << "\nItem berhasil dipindahkan dari C" << slotIdSrc << " ke I" << slotIdTarget << ".\n\n";
             } else {
                 if (Inventory::buffer[rowTarget][colTarget]->getId() != temp->getId()) {
                     throw new DifferentItemException("C" + to_string(slotIdSrc), "I" + to_string(slotIdTarget));
                 }
 
-                Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
-                // delete temp;
+                if (temp->isTool()) {
+                    cout << "\nItem tidak dipindahkan ke inventory. Terdapat item lain yang sudah berada di inventory.\n\n";
+                } else {
+                    if (Inventory::buffer[rowTarget][colTarget]->getQuantity() + temp->getQuantity() <= 64) {
+                        Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + temp->getQuantity());
+                        Crafting::deleteCraftingSlot(slotIdSrc);
+                        cout << "\nItem berhasil dipindahkan dari C" << slotIdSrc << " ke I" << slotIdTarget << ".\n\n";
+                    } else {
+                        cout << "\nItem tidak dipindahkan ke inventory. Terdapat item lain yang sudah berada di inventory.\n\n";
+                    }
+                }
+
+                // Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
             }
-            // Crafting::setCraftingSlot(slotIdSrc, nullptr, false);
-            Crafting::deleteCraftingSlot(slotIdSrc);
-            cout << "\nItem berhasil dipindahkan dari C" << slotIdSrc << " ke I" << slotIdTarget << ".\n\n";
 
         }
     } else {
@@ -247,22 +257,29 @@ void Inventory::moveInventory() {
         Item * temp;
         for (int i = 0; i < slotQuantity; i++) {
             slotIdTarget = stoi(tempArr[i].substr(1));
-            if (Crafting::getCraftingSlot(slotIdTarget) != nullptr) {
-                failedMove++;
-            } else {
-                temp = Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1);
+            temp = Item::createItem(Inventory::buffer[rowSrc][colSrc]->getName(), 1);
+            if (Crafting::getCraftingSlot(slotIdTarget) == nullptr) {
                 if (temp->isTool()) {
                     ((Tool *)temp)->setDurability(((Tool *)Inventory::buffer[rowSrc][colSrc])->getDurability());
                 }
 
-                if (Crafting::getCraftingSlot(slotIdTarget) == nullptr) {
-                    Crafting::setCraftingSlot(slotIdTarget, temp, false);
+                Crafting::setCraftingSlot(slotIdTarget, temp);
+            } else {
+                if (temp->getId() == Inventory::buffer[rowSrc][colSrc]->getId()) {
+                    if (Crafting::getCraftingSlot(slotIdTarget)->isTool()) {
+                        failedMove++;
+                    } else {
+                        if (temp->getQuantity() + 1 > 64) {
+                            failedMove++;
+                        } else {
+                            Crafting::setCraftingSlot(slotIdTarget, temp);
+                        }
+                    }
                 } else {
-                    Crafting::setCraftingSlot(slotIdTarget, temp, true);
+                    failedMove++;
                 }
             }
         }
-        // delete temp;
 
         Inventory::buffer[rowSrc][colSrc]->setQuantity(Inventory::buffer[rowSrc][colSrc]->getQuantity() - (slotQuantity - failedMove));
         if (Inventory::buffer[rowSrc][colSrc]->getQuantity() <= 0) {
@@ -273,7 +290,7 @@ void Inventory::moveInventory() {
         if (failedMove == slotQuantity) {
             cout << "\nItem tidak dapat dimasukkan ke crafting table! (Tidak muat).\n\n";
         } else if (failedMove > 0) {
-            cout << "\nItem tidak dipindahkan semua ke crafting table. Terdapat item lain yang sudah berada di crafting table.\n\n";
+            cout << "\nItem tidak dipindahkan sepenuhny ke crafting table. Terdapat item lain yang sudah berada di crafting table.\n\n";
         } else {
             cout << "\nItem berhasil dipindahkan.\n\n";
         }
