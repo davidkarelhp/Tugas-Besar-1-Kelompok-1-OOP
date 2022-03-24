@@ -98,6 +98,7 @@ void Player::play()
             cout << '\n' << err.what() << "\n\n";
         } catch (BaseException * err) {
             cout << '\n' << err->message() << "\n\n";
+            delete err;
         }
         cout << "Masukkan command: ";
     }

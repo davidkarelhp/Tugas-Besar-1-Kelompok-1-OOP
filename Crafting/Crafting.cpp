@@ -295,7 +295,7 @@ void Crafting::craft() {
 
             // cout << "\narrLength: " << arrLength << '\n';
             // for (int k = 0; k < arrLength; k++) {
-            //     cout << arr[k] << " ";
+            //     cout << arr[k] << " ";  
             // }
             // cout << "\n\n";
 
@@ -335,7 +335,7 @@ void Crafting::craft() {
 
                         // cout << i << " " << j << '\n';
                         // cout << idx << '\n';
-                        // idx++;
+                        idx++;
                     }
                 }
             // cout << "\narrLength: " << arrLength << '\n';
@@ -358,7 +358,7 @@ void Crafting::craft() {
             } else {
                 cout << "\nItem yang di-craft adalah " << temp->getFirst() << " dengan jumlah " << temp->getSecond() << ".\n";
                 Inventory::giveAlgorithm(temp->getFirst(), temp->getSecond(), 0);
-                delete temp;
+                // delete temp;
                 Crafting::clear();
             }
         }
