@@ -1,8 +1,8 @@
 # Doraemonangis Crafting Gadget
-> Tugas besar 1 IF2210 Pemrograman Berorientasi Objek 2022
+> Tugas Besar 1 IF2210 Pemrograman Berorientasi Objek 2022
 
 ## General Information
-A command-line interface (CLI) program to ...
+A command-line interface (CLI) game where the player can craft new item from a list of item. Items in this game are divided into two categories, tool and non-tool. Player is allowed to add, discard, move, and give the items from and to the inventory. Lastly, player can also export all the items listed in the inventory to a file. 
 
 ## Setup
 - Use Linux or WSL (Windows)
