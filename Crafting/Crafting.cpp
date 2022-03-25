@@ -44,7 +44,7 @@ void Crafting::showCraftingTable() {
         }
         cout << '\n';
     }
-    Triplet<string, int, int> * temp = new Triplet<string, int, int>();
+    Triplet<string, int, int> * temp;
 
     temp = Crafting::checkCraftingConfiguration();
 
@@ -183,7 +183,7 @@ Triplet<string, int, int> * Crafting::checkCraftingConfiguration() {
     string * arr;
     bool found;
     int limitj, arrLength, idx, i, j;
-    Triplet<string, int , int> * temp = new Triplet<string, int , int>;
+    Triplet<string, int , int> * temp;
     limitj = endLeftIdx[1];
     arrLength = (endLeftIdx[0] * 3 + endLeftIdx[1]) - (startLeftIdx[0] * 3 + startLeftIdx[1]) + 1;
 
