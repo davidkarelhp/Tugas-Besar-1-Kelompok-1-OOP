@@ -1,10 +1,17 @@
 # Doraemonangis Crafting Gadget
 > Tugas Besar 1 IF2210 Pemrograman Berorientasi Objek 2022
 
+## Table of Contents
+* [General Info](#general-information)
+* [Repo Structure](#repository-structure)
+* [Setup](#setup)
+* [Usage](#usage)
+* [Contributors](#contributors)
+
 ## General Information
 A command-line interface (CLI) game where the player can craft new item from a list of item. Items in this game are divided into two categories, tool and non-tool. Player is allowed to add, discard, move, and give the items from and to the inventory. Lastly, player can also export all the items listed in the inventory to a file. 
 
-## Struktur Repository
+## Repository Structure
     .
     │   .gitignore
     │   check.cpp
