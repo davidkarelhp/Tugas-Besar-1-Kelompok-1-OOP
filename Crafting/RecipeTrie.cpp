@@ -13,7 +13,6 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
     for (int i = 0; i < n; i++) {
         if (currentNode->get(recipeArr[i]) == nullptr) {
             temp = Item::getMap(recipeArr[i]).getSecond();
-            // cout << "type : " << temp << '\n';
             if (temp == "-") {
                 return nullptr;
             } else {
@@ -27,7 +26,6 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
         }
     }
 
-    // return nullptr;
     return currentNode;
 }
 
@@ -43,7 +41,6 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
     currentNode = this->root;
     int currentIdx = 0;
     for (i = 0; i < row; i++) {
-        // cout << i << " ";
         for (int j = 0; j < 3; j++) {
             if (j < col) {
                 if (!(recipeArr[currentIdx] == "-" && !found)) {
@@ -51,7 +48,6 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
                         currentNode->set(recipeArr[currentIdx], new TrieNode());
                     }
                     currentNode = currentNode->get(recipeArr[currentIdx]);
-                    // cout << recipeArr[currentIdx] << " ";
                 }
 
                 if (!found && recipeArr[currentIdx] != "-") {
@@ -62,12 +58,10 @@ void RecipeTrie::buildRecipe(int row, int col, string* recipeArr, string result,
                 if (currentNode->get("-") == nullptr) {
                     currentNode->set("-", new TrieNode());
                 }
-                // cout << "- ";
                 currentNode = currentNode->get("-");
             } 
         }
     }
-    // cout << "\n";
     currentNode->set("*", (TrieNode*)resultTriplet);
 }
 

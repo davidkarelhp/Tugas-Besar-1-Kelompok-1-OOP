@@ -196,9 +196,7 @@ void Inventory::moveInventory() {
         
         } else //inventorySlotIdSrc.substr(0, 1) == "C"
         {
-            // int rowSrc = (slotIdSrc / 3), colSrc = (slotIdSrc % 3);
             Item * temp = Crafting::getCraftingSlot(slotIdSrc);
-            // cout << temp->getName() << " " << temp->getId() << '\n';
             
             if (temp == nullptr) {
                 throw new ItemNotExistException("C" + to_string(slotIdSrc));
@@ -230,7 +228,6 @@ void Inventory::moveInventory() {
                     }
                 }
 
-                // Inventory::buffer[rowTarget][colTarget]->setQuantity(Inventory::buffer[rowTarget][colTarget]->getQuantity() + 1);
             }
 
         }
