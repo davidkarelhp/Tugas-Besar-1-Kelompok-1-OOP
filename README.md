@@ -12,9 +12,6 @@ A command-line interface (CLI) game where the player can craft new item from a l
     │   Makefile
     │   README.md
     │
-    ├───.vscode
-    │       settings.json
-    │
     ├───config
     │   │   item.txt
     │   │
