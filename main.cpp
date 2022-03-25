@@ -19,8 +19,7 @@ using namespace std;
 int main() {
   string configPath = "./config";
   Player mobita(configPath);
-  //cout << setw(25);
-  //cout << "hello  world" << endl;
+
   cout << R"(
 ███╗░░░███╗░█████╗░██╗███╗░░██╗██╗░░██╗██████╗░███████╗███████╗████████╗
 ████╗░████║██╔══██╗██║████╗░██║██║░██╔╝██╔══██╗██╔════╝██╔════╝╚══██╔══╝
@@ -29,24 +28,10 @@ int main() {
 ██║░╚═╝░██║██║░░██║██║██║░╚███║██║░╚██╗██║░░██║███████╗██║░░░░░░░░██║░░░
 ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝░░░░░░░░╚═╝░░░)" << endl;
 
-  //cout << setw(30);
   cout << endl;
   cout << "Brought to you by: BaikBaik Saja" << endl;
   cout << endl;
-  // cout << setw(25);
-  // cout << "Commands:" << endl;
-  // cout << ">>> GIVE <ITEM_NAME> <ITEM_QTY>" << endl;
-  // cout << ">>> DISCARD <INVENTORY_SLOT_ID> <ITEM_QTY>" << endl;
-  // cout << ">>> MOVE <INVENTORY_SLOT_ID> N <CRAFTING_SLOT_ID_1>" << endl;
-  // cout << ">>> MOVE <INVENTORY_SLOT_ID_SRC> 1 <INVENTORY_SLOT_ID_DEST>" << endl;
-  // cout << ">>> MOVE <CRAFTING_SLOT_ID> 1 <INVENTORY_SLOT_ID>" << endl;
 
-
-  // cout << ">>> USE <INVENTORY_SLOT_ID>" << endl;
-  // cout << ">>> CRAFT" << endl;
-  // cout << "EXPORT <NAMA_FILE>" << endl;
-  // cout << endl;
-  // cout << setw(0);
   cout << R"(
      _______________________________________________________________
     /\                                                              \
@@ -64,6 +49,6 @@ int main() {
   )";
   cout << endl << endl << endl;
   mobita.play();
-  //cout << "hello world" << endl;
+
   return 0;
 }
