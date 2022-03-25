@@ -4,7 +4,7 @@ EXT_OUT = out
 EXT_ANS = ans
 EXECUTABLE_FILENAME = main
 ALL_SRCS := $(wildcard Exception/*.hpp) $(wildcard IO/outputFile/*.cpp) $(wildcard IO/inputItem/*.cpp) $(wildcard IO/inputRecipe/*.cpp) $(wildcard Item/*.cpp) $(wildcard Inventory/*.cpp) $(wildcard Crafting/*.cpp) $(wildcard Player/*.cpp) $(wildcard *.cpp)
-SRCS     := $(filter-out check.cpp, $(ALL_SRCS))
+SRCS     := $(filter-out check.cpp Item/driver_item.cpp, $(ALL_SRCS))
 
 all: compile test check
 
