@@ -151,6 +151,20 @@ void Crafting::craft() {
     if (startLeftIdx[0] != -1) {
         if (Crafting::filledSlot == 2 && Crafting::filledSlot == Crafting::toolsQuantity) {
             if (Crafting::craftingTable[Crafting::startLeftIdx[0]][Crafting::startLeftIdx[1]]->getId() == Crafting::craftingTable[Crafting::endLeftIdx[0]][Crafting::endLeftIdx[1]]->getId()) {
+
+                cout << R"(
+    __^__                             __^__ 
+   ( ___ )---------------------------( ___ )
+    | / | _____  ___    ___   _       | \ | 
+    | / | |_   _|/ _ \  / _ \ | |     | \ | 
+    | / |   | | | | | || | | || |     | \ | 
+    | / |   | | | |_| || |_| || |___  | \ | 
+    | / |   |_|  \___/  \___/ |_____| | \ | 
+    | / |                             | \ | 
+    |___|                             |___| 
+   (_____)---------------------------(_____)               
+                )" << endl;
+
                 cout << "\nItem yang di-craft adalah " << Crafting::craftingTable[Crafting::startLeftIdx[0]][Crafting::startLeftIdx[1]]->getName() << " dengan durability " << min(10, 
                     ((Tool*)Crafting::craftingTable[Crafting::startLeftIdx[0]][Crafting::startLeftIdx[1]])->getDurability() +
                     ((Tool*)Crafting::craftingTable[Crafting::endLeftIdx[0]][Crafting::endLeftIdx[1]])->getDurability()) << ".\n";
@@ -171,6 +185,20 @@ void Crafting::craft() {
             if (temp == nullptr) {
                 cout << "\nTidak ada resep yang cocok dengan konfigurasi item pada crafting table.\n\n";
             } else {
+                cout << R"(
+  / ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \
+ |  /~~\                                                  /~~\  |
+ |\ \   |   _   _                 _____              _   |   / /|
+ | \   /|  | \ | |  ___   _ __   |_   _|___    ___  | |  |\   / |
+ |  ~~  |  |  \| | / _ \ | '_ \    | | / _ \  / _ \ | |  |  ~~  |
+ |      |  | |\  || (_) || | | |   | || (_) || (_) || |  |      |
+ |      |  |_| \_| \___/ |_| |_|   |_| \___/  \___/ |_|  |      |
+ |      |                                                |      |
+  \     |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|     /
+   \   /                                                  \   /
+    ~~~                                                    ~~~
+                )"
+                 << endl;
                 cout << "\nItem yang di-craft adalah " << temp->getFirst() << " dengan jumlah " << temp->getSecond() * Crafting::minQuantity << ".\n";
                 Inventory::giveAlgorithm(temp->getFirst(), temp->getSecond() * Crafting::minQuantity, 0);
                 Crafting::clear(Crafting::minQuantity);

@@ -17,6 +17,7 @@ class Inventory {
         static void useInventory();
         static void giveAlgorithm(string, int, int);
         static int * * output();
+        static void exportInventory();
 
 
         

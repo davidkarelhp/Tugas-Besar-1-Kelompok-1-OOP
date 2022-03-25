@@ -295,6 +295,33 @@ void Inventory::moveInventory() {
         delete[] tempArr;
     }
 }
+void Inventory::exportInventory(){
+
+    string targetFile;
+    cin >> targetFile;
+    ofstream f(targetFile);
+    
+    for (int i=0; i<27; i++){
+        int row = i/9;
+        int col = 1 % 9;
+        
+        if (Inventory::buffer[row][col]==nullptr){
+            f<<"0 : 0\n";
+        }
+        else{
+            f << Inventory::buffer[row][col]->getId() << " : ";
+            if (Inventory::buffer[row][col]->isTool()) {
+                f << ((Tool*)Inventory::buffer[row][col])->getDurability() << endl;
+            } else {
+                f << Inventory::buffer[row][col]->getQuantity()<<endl;
+            }
+        }
+
+
+    }
+    f.close();
+
+}
 
 void Inventory::useInventory() {
     string inventorySlotId;
