@@ -13,7 +13,6 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
     for (int i = 0; i < n; i++) {
         if (currentNode->get(recipeArr[i]) == nullptr) {
             temp = Item::getMap(recipeArr[i]).getSecond();
-            // cout << "type : " << temp << '\n';
             if (temp == "-") {
                 return nullptr;
             } else {
@@ -27,7 +26,6 @@ TrieNode * RecipeTrie::getLastNode(string* recipeArr, int n) {
         }
     }
 
-    // return nullptr;
     return currentNode;
 }
 
